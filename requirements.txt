@@ -2,9 +2,9 @@ Flask==3.0.0
 gunicorn==21.2.0
 python-dotenv==1.0.0
 
-# Lightweight AI dependencies
+# Lightweight AI dependencies - updated versions
 transformers==4.36.0
-torch==2.1.0
+torch==2.5.1
 sentence-transformers==2.2.2
 chromadb==0.4.18
 
