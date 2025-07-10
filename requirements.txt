@@ -1,0 +1,14 @@
+Flask==3.0.0
+python-dotenv==1.0.0
+requests==2.31.0
+gunicorn==22.0.0
+
+# Lightweight AI - no heavy models
+openai==1.51.0
+sentence-transformers==3.1.1
+
+# Minimal data processing
+numpy==1.26.4
+
+# Basic NLP
+nltk==3.9.1
