@@ -14,7 +14,7 @@ except ImportError:
     RAG_AVAILABLE = False
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24))
 
 # In-memory storage (replace with database in production)
 users_db = {}
