@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BodyBae.ai - Your AI Health Coach</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4F46E5;
+            --primary-light: #6366F1;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --background: #FAFBFC;
+            --surface: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --success: #22C55E;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Main Layout */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .chat-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-subtitle {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 500px;
+            min-height: 400px;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: var(--primary);
+            color: white;
+        }
+
+        .message-content {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .message.bot .message-content {
+            background: #F3F4F6;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user .message-content {
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            padding: 0.75rem 1rem;
+            background: #F3F4F6;
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .chat-input-container {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            background: var(--background);
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            align-items: end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            resize: none;
+            max-height: 100px;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .send-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .send-button:hover {
+            background: var(--primary-light);
+            transform: scale(1.05);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Profile Setup */
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input, .form-select {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .profile-button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .profile-button:hover {
+            background: #059669;
+        }
+
+        .profile-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Health Stats */
+        .health-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Progress Tracking */
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .progress-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .progress-details {
+            flex: 1;
+            margin-left: 0.75rem;
+        }
+
+        .progress-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .progress-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .health-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+            }
+
+            .quick-action {
+                text-align: center;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Status indicators */
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .status-online {
+            background: var(--success);
+        }
+
+        .status-offline {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                🏥 BodyBae.ai
+            </div>
+            <div class="user-info" id="user-info">
+                <span class="status-indicator status-online"></span>
+                <span>AI Health Coach Ready</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-title">💬 Your Personal Health Coach</div>
+                <div class="chat-subtitle">Ask me anything about fitness, nutrition, and wellness</div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot fade-in">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        Hi there! I'm BodyBae, your AI health and fitness coach. I'm here to help you achieve your wellness goals with personalized advice, workout plans, and nutrition guidance.
+                        <br><br>
+                        To get started, please set up your profile on the right, then we can dive into your health journey! 🚀
+                    </div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typing-indicator">
+                <div class="message-avatar">🤖</div>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="quick-actions" id="quick-actions">
+                    <div class="quick-action" onclick="sendQuickMessage('Create a workout plan for me')">🏋️ Workout Plan</div>
+                    <div class="quick-action" onclick="sendQuickMessage('What should I eat for breakfast?')">🍳 Meal Ideas</div>
+                    <div class="quick-action" onclick="sendQuickMessage('I need motivation today')">💪 Motivation</div>
+                    <div class="quick-action" onclick="sendQuickMessage('How much water should I drink?')">💧 Hydration</div>
+                </div>
+
+                <div class="input-wrapper">
+                    <textarea 
+                        class="chat-input" 
+                        id="chat-input" 
+                        placeholder="Ask about fitness, nutrition, goals..."
+                        rows="1"
+                    ></textarea>
+                    <button class="send-button" id="send-button" onclick="sendMessage()">
+                        ➤
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Profile Setup -->
+            <div class="sidebar-card">
+                <div class="card-title">
+                    👤 Your Profile
+                </div>
+                <form class="profile-form" id="profile-form">
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-input" id="name" placeholder="Enter your name">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Age</label>
+                            <input type="number" class="form-input" id="age" min="13" max="100" placeholder="25">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select" id="gender">
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Height (cm)</label>
+                            <input type="number" class="form-input" id="height" min="100" max="250" placeholder="170">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Weight (kg)</label>
+                            <input type="number" class="form-input" id="weight" min="30" max="300" step="0.1" placeholder="70">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Activity Level</label>
+                        <select class="form-select" id="activity-level">
+                            <option value="">Select activity level</option>
+                            <option value="sedentary">Sedentary (Little/no exercise)</option>
+                            <option value="lightly_active">Lightly Active (1-3 days/week)</option>
+                            <option value="moderately_active">Moderately Active (3-5 days/week)</option>
+                            <option value="very_active">Very Active (6-7 days/week)</option>
+                            <option value="extremely_active">Extremely Active (2x/day)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Primary Goal</label>
+                        <select class="form-select" id="goal">
+                            <option value="">Select your goal</option>
+                            <option value="lose_weight">Lose Weight</option>
+                            <option value="gain_muscle">Gain Muscle</option>
+                            <option value="improve_endurance">Improve Endurance</option>
+                            <option value="general_fitness">General Fitness</option>
+                            <option value="maintain_weight">Maintain Weight</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="profile-button" id="save-profile" onclick="saveProfile()" disabled>
+                        Save Profile & Get Started
+                    </button>
+                </form>
+            </div>
+
+            <!-- Health Stats -->
+            <div class="sidebar-card" id="health-stats-card" style="display: none;">
+                <div class="card-title">
+                    📊 Your Health Stats
+                </div>
+                <div class="health-stats" id="health-stats">
+                    <!-- Stats will be populated here -->
+                </div>
+            </div>
+
+            <!-- Daily Tips -->
+            <div class="sidebar-card">
+                <div class="card-title">
+                    💡 Daily Tip
+                </div>
+                <div id="daily-tip">
+                    <p>💧 <strong>Stay Hydrated:</strong> Aim for 8-10 glasses of water daily. Proper hydration boosts energy, improves skin health, and supports muscle function.</p>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="sidebar-card" id="progress-card" style="display: none;">
+                <div class="card-title">
+                    📈 Recent Activity
+                </div>
+                <div id="progress-list">
+                    <!-- Progress items will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let userProfile = null;
+        let conversationHistory = [];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadUserProfile();
+            updateQuickActions();
+        });
+
+        function setupEventListeners() {
+            // Form validation
+            const formInputs = ['name', 'age', 'height', 'weight', 'gender', 'activity-level', 'goal'];
+            formInputs.forEach(inputId => {
+                document.getElementById(inputId).addEventListener('input', validateForm);
+            });
+
+            // Chat input handling
+            const chatInput = document.getElementById('chat-input');
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+            });
+        }
+
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const age = document.getElementById('age').value;
+            const height = document.getElementById('height').value;
+            const weight = document.getElementById('weight').value;
+            const gender = document.getElementById('gender').value;
+            const activityLevel = document.getElementById('activity-level').value;
+            const goal = document.getElementById('goal').value;
+            
+            const isValid = name && age && height && weight && gender && activityLevel && goal;
+            document.getElementById('save-profile').disabled = !isValid;
+        }
+
+        async function saveProfile() {
+            const button = document.getElementById('save-profile');
+            const originalText = button.textContent;
+            button.textContent = 'Saving...';
+            button.disabled = true;
+
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                age: parseInt(document.getElementById('age').value),
+                height: parseFloat(document.getElementById('height').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                gender: document.getElementById('gender').value,
+                activity_level: document.getElementById('activity-level').value,
+                goal: document.getElementById('goal').value
+            };
+
+            try {
+                // Calculate BMI and other stats
+                const heightM = formData.height / 100;
+                const bmi = formData.weight / (heightM * heightM);
+                
+                // Calculate BMR (Mifflin-St Jeor Equation)
+                let bmr;
+                if (formData.gender === 'male') {
+                    bmr = 10 * formData.weight + 6.25 * formData.height - 5 * formData.age + 5;
+                } else {
+                    bmr = 10 * formData.weight + 6.25 * formData.height - 5 * formData.age - 161;
+                }
+                
+                // Calculate TDEE
+                const activityMultipliers = {
+                    'sedentary': 1.2,
+                    'lightly_active': 1.375,
+                    'moderately_active': 1.55,
+                    'very_active': 1.725,
+                    'extremely_active': 1.9
+                };
+                const tdee = bmr * activityMultipliers[formData.activity_level];
+                
+                // BMI Category
+                let bmiCategory, bmiAdvice;
+                if (bmi < 18.5) {
+                    bmiCategory = 'Underweight';
+                    bmiAdvice = 'Focus on healthy weight gain with nutrient-dense foods.';
+                } else if (bmi < 25) {
+                    bmiCategory = 'Normal';
+                    bmiAdvice = 'Great! Maintain your healthy weight with balanced nutrition.';
+                } else if (bmi < 30) {
+                    bmiCategory = 'Overweight';
+                    bmiAdvice = 'Consider a moderate approach to healthy weight loss.';
+                } else {
+                    bmiCategory = 'Obese';
+                    bmiAdvice = 'Consult healthcare professionals for guidance.';
+                }
+
+                userProfile = {
+                    ...formData,
+                    bmi: Math.round(bmi * 10) / 10,
+                    bmi_category: bmiCategory,
+                    bmi_advice: bmiAdvice,
+                    bmr: Math.round(bmr),
+                    tdee: Math.round(tdee)
+                };
+
+                // Save to localStorage
+                localStorage.setItem('bodybae_profile', JSON.stringify(userProfile));
+
+                // Update UI
+                showHealthStats();
+                updateUserInfo();
+                updateQuickActions();
+                
+                // Add success message to chat
+                addBotMessage(`🎉 Welcome ${formData.name}! Your profile is set up. Your BMI is ${userProfile.bmi} (${bmiCategory}). I'm ready to help you with your ${formData.goal.replace('_', ' ')} goal!`);
+                
+                // Update daily tip
+                updateDailyTip();
+
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                addBotMessage('Sorry, there was an error saving your profile. Please try again.');
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        function loadUserProfile() {
+            const saved = localStorage.getItem('bodybae_profile');
+            if (saved) {
+                userProfile = JSON.parse(saved);
+                
+                // Populate form
+                document.getElementById('name').value = userProfile.name;
+                document.getElementById('age').value = userProfile.age;
+                document.getElementById('height').value = userProfile.height;
+                document.getElementById('weight').value = userProfile.weight;
+                document.getElementById('gender').value = userProfile.gender;
+                document.getElementById('activity-level').value = userProfile.activity_level;
+                document.getElementById('goal').value = userProfile.goal;
+                
+                showHealthStats();
+                updateUserInfo();
+                validateForm();
+            }
+        }
+
+        function showHealthStats() {
+            if (!userProfile) return;
+
+            const statsCard = document.getElementById('health-stats-card');
+            const statsContainer = document.getElementById('health-stats');
+            
+            statsContainer.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-number">${userProfile.bmi}</div>
+                    <div class="stat-label">BMI</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${userProfile.tdee}</div>
+                    <div class="stat-label">Daily Calories</div>
+                </div>
+            `;
+            
+            statsCard.style.display = 'block';
+        }
+
+        function updateUserInfo() {
+            if (!userProfile) return;
+            
+            const userInfo = document.getElementById('user-info');
+            userInfo.innerHTML = `
+                <span class="status-indicator status-online"></span>
+                <span>Hello, ${userProfile.name}!</span>
+            `;
+        }
+
+        function updateQuickActions() {
+            const actions = document.getElementById('quick-actions');
+            
+            if (userProfile) {
+                // Personalized quick actions based on goal
+                const goalActions = {
+                    'lose_weight': [
+                        '🥗 Healthy meal plan for weight loss',
+                        '🏃 Best cardio for fat burning',
+                        '⚖️ How to track my progress',
+                        '💪 I need motivation'
+                    ],
+                    'gain_muscle': [
+                        '🏋️ Muscle building workout',
+                        '🥩 High protein meal ideas',
+                        '📈 How to track muscle gain',
+                        '💪 I need motivation'
+                    ],
+                    'improve_endurance': [
+                        '🏃 Endurance training plan',
+                        '⚡ Pre-workout nutrition',
+                        '📊 How to measure progress',
+                        '💪 I need motivation'
+                    ],
+                    'general_fitness': [
+                        '🏋️ Full body workout',
+                        '🍎 Balanced meal planning',
+                        '📈 Track my overall health',
+                        '💪 I need motivation'
+                    ],
+                    'maintain_weight': [
+                        '⚖️ Maintenance meal plan',
+                        '🏃 Active lifestyle tips',
+                        '📊 How to stay consistent',
+                        '💪 I need motivation'
+                    ]
+                };
+                
+                const goalKey = userProfile.goal || 'general_fitness';
+                const personalizedActions = goalActions[goalKey] || goalActions['general_fitness'];
+                
+                actions.innerHTML = personalizedActions.map(action => 
+                    `<div class="quick-action" onclick="sendQuickMessage('${action.split(' ').slice(1).join(' ')}')">${action}</div>`
+                ).join('');
+            }
+        }
+
+        function updateDailyTip() {
+            const tips = {
+                'lose_weight': '🔥 <strong>Weight Loss Tip:</strong> Create a moderate caloric deficit of 500 calories daily for healthy 1 lb/week weight loss.',
+                'gain_muscle': '💪 <strong>Muscle Building Tip:</strong> Eat 1.6-2.2g protein per kg body weight daily and focus on progressive overload.',
+                'improve_endurance': '🏃 <strong>Endurance Tip:</strong> Mix steady-state cardio with interval training for best cardiovascular improvements.',
+                'general_fitness': '🌟 <strong>Fitness Tip:</strong> Aim for 150 minutes of moderate cardio plus 2-3 strength sessions weekly.',
+                'maintain_weight': '⚖️ <strong>Maintenance Tip:</strong> Focus on consistency and balance rather than perfection in your routine.'
+            };
+            
+            const goalKey = userProfile?.goal || 'general_fitness';
+            const tip = tips[goalKey] || tips['general_fitness'];
+            
+            document.getElementById('daily-tip').innerHTML = `<p>${tip}</p>`;
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('chat-input').value = message;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            addUserMessage(message);
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Simulate API call (replace with actual backend)
+                const response = await generateResponse(message);
+                hideTypingIndicator();
+                addBotMessage(response);
+            } catch (error) {
+                hideTypingIndicator();
+                addBotMessage('Sorry, I\'m having trouble responding right now. Please try again! 😔');
+            }
+        }
+
+        function addUserMessage(message) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user fade-in';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">👤</div>
+                <div class="message-content">${message}</div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addBotMessage(message) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot fade-in';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">${message}</div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typing-indicator').style.display = 'flex';
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typing-indicator').style.display = 'none';
+        }
+
+        function scrollToBottom() {
+            const messagesContainer = document.getElementById('chat-messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Enhanced AI Response Generator
+        async function generateResponse(message) {
+            const messageLower = message.toLowerCase();
+            const name = userProfile?.name || 'there';
+            
+            // Simulate thinking time
+            await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+
+            // Context-aware responses based on user profile
+            if (userProfile) {
+                // Weight loss responses
+                if (userProfile.goal === 'lose_weight' && 
+                    (messageLower.includes('meal') || messageLower.includes('diet') || messageLower.includes('food'))) {
+                    const calories = Math.max(1200, userProfile.tdee - 500);
+                    return `Hi ${name}! For weight loss, aim for about ${calories} calories daily (that's a 500-calorie deficit from your ${userProfile.tdee} maintenance calories). Focus on:\n\n🥗 Fill half your plate with vegetables\n🍗 Include lean protein at every meal (aim for 25-30g)\n🌾 Choose complex carbs like quinoa, oats, brown rice\n💧 Drink water before meals\n\nWould you like me to suggest some specific meal ideas?`;
+                }
+
+                // Muscle gain responses
+                if (userProfile.goal === 'gain_muscle' && 
+                    (messageLower.includes('workout') || messageLower.includes('exercise') || messageLower.includes('training'))) {
+                    return `Perfect question, ${name}! For muscle building, here's your game plan:\n\n🏋️ **Workout Schedule**: 3-4 strength sessions per week\n💪 **Focus on compound movements**: Squats, deadlifts, bench press, rows\n📈 **Progressive overload**: Gradually increase weight, reps, or sets\n⏰ **Rep ranges**: 6-12 reps for muscle growth\n😴 **Rest**: 48-72 hours between training same muscles\n\nWith your current stats, start with bodyweight or light weights and focus on perfect form. Want a specific workout plan?`;
+                }
+
+                // Nutrition questions
+                if (messageLower.includes('protein') || messageLower.includes('nutrition')) {
+                    const proteinNeeds = userProfile.goal === 'gain_muscle' ? 
+                        Math.round(userProfile.weight * 1.8) : Math.round(userProfile.weight * 1.2);
+                    return `Great nutrition question, ${name}! Based on your ${userProfile.goal.replace('_', ' ')} goal:\n\n🥩 **Protein target**: ${proteinNeeds}g daily (${Math.round(proteinNeeds/4)} servings of 25-30g)\n🍳 **Best sources**: Chicken, fish, eggs, Greek yogurt, legumes, tofu\n⏰ **Timing**: Spread throughout the day, especially post-workout\n\n${userProfile.goal === 'gain_muscle' ? 'Higher protein helps build and repair muscle tissue!' : 'Adequate protein helps preserve muscle during weight loss!'}`;
+                }
+
+                // BMI-specific advice
+                if (messageLower.includes('weight') && !messageLower.includes('lose') && !messageLower.includes('gain')) {
+                    return `${name}, your current BMI is ${userProfile.bmi} (${userProfile.bmi_category}). ${userProfile.bmi_advice}\n\n📊 **Your stats**:\n• Maintenance calories: ${userProfile.tdee}/day\n• BMR: ${userProfile.bmr} calories\n• Activity level: ${userProfile.activity_level.replace('_', ' ')}\n\nRemember, BMI is just one indicator. Focus on how you feel, your energy levels, and building healthy habits! 🌟`;
+                }
+            }
+
+            // General health responses
+            if (messageLower.includes('water') || messageLower.includes('hydration')) {
+                const waterNeeds = userProfile ? Math.round(userProfile.weight * 35) : 2500;
+                return `Great question about hydration! 💧\n\n🎯 **Daily target**: ${Math.round(waterNeeds/250)} glasses (${(waterNeeds/1000).toFixed(1)} liters)\n⏰ **Best times**: Upon waking, before meals, during workouts\n🌡️ **Hot weather/exercise**: Add 500-750ml extra\n📱 **Pro tip**: Use a water tracking app or mark your bottle\n\nProper hydration boosts energy, improves skin, aids digestion, and supports muscle function!`;
+            }
+
+            if (messageLower.includes('sleep') || messageLower.includes('rest') || messageLower.includes('recovery')) {
+                return `Sleep is SO important for your health goals! 😴\n\n🕘 **Target**: 7-9 hours nightly\n🌙 **Benefits**: Muscle recovery, hormone regulation, mental clarity\n📱 **Sleep hygiene**:\n• Consistent bedtime/wake time\n• Cool, dark room (65-68°F)\n• No screens 1 hour before bed\n• Limit caffeine after 2 PM\n\n${userProfile?.goal === 'gain_muscle' ? 'Growth hormone peaks during deep sleep - crucial for muscle building!' : 'Poor sleep affects hunger hormones, making weight management harder.'}`;
+            }
+
+            if (messageLower.includes('motivation') || messageLower.includes('give up') || messageLower.includes('struggling')) {
+                const motivationalMessages = [
+                    `${name}, I believe in you! 🌟 Remember why you started this journey. Every small step counts, and you're already taking action by being here!`,
+                    `You've got this, ${name}! 💪 Progress isn't always linear. Some days are harder than others, but consistency beats perfection every time.`,
+                    `${name}, you're stronger than you think! 🔥 Focus on how far you've come, not just how far you have to go. Celebrate the small wins!`,
+                    `Don't give up, ${name}! 🚀 Your future self will thank you for not quitting today. Start with just 10 minutes - momentum builds on itself!`
+                ];
+                return motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)] + 
+                    `\n\n💡 Quick mood booster: Try 5 minutes of deep breathing or a short walk. Sometimes that's all we need to reset! 🌈`;
+            }
+
+            if (messageLower.includes('workout') || messageLower.includes('exercise')) {
+                if (!userProfile) {
+                    return `I'd love to help you with workouts! 🏋️ First, please set up your profile so I can give you personalized recommendations based on your fitness level and goals.`;
+                }
+                
+                const workoutAdvice = {
+                    'sedentary': 'Start with 20-30 minutes of walking daily, then add 2 bodyweight sessions weekly',
+                    'lightly_active': 'Add 1-2 more strength sessions and increase cardio to 30-40 minutes',
+                    'moderately_active': 'Focus on progressive overload and consider adding HIIT 1-2x weekly',
+                    'very_active': 'Ensure adequate recovery and vary your training to prevent plateaus',
+                    'extremely_active': 'Be mindful of overtraining - quality over quantity!'
+                };
+                
+                return `Perfect timing for a workout chat, ${name}! 🏋️\n\nBased on your ${userProfile.activity_level.replace('_', ' ')} level:\n${workoutAdvice[userProfile.activity_level]}\n\n🎯 **For your ${userProfile.goal.replace('_', ' ')} goal**:\n${getGoalSpecificWorkoutTip(userProfile.goal)}\n\nWant me to create a specific workout plan for this week?`;
+            }
+
+            // Default helpful response
+            return `Hi ${name || 'there'}! I'm here to help with your health and fitness journey. I can assist with:\n\n🏋️ **Workout plans** tailored to your goals\n🥗 **Nutrition advice** and meal planning\n📊 **Progress tracking** and goal setting\n💪 **Motivation** and mindset support\n😴 **Sleep and recovery** guidance\n\nWhat would you like to focus on today? Feel free to ask me anything specific! 😊`;
+        }
+
+        function getGoalSpecificWorkoutTip(goal) {
+            const tips = {
+                'lose_weight': 'Combine 150 min moderate cardio + 2-3 strength sessions weekly',
+                'gain_muscle': 'Focus on compound lifts, 6-12 reps, progressive overload',
+                'improve_endurance': 'Mix steady-state cardio with interval training',
+                'general_fitness': 'Balance cardio, strength, and flexibility work',
+                'maintain_weight': 'Continue current activity + add variety to prevent boredom'
+            };
+            return tips[goal] || tips['general_fitness'];
+        }
+    </script>
+</body>
+</html>
