@@ -1,0 +1,20 @@
+Flask==3.0.0
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Core AI packages - lightweight but powerful
+openai==1.51.0
+langchain==0.1.20
+langchain-openai==0.1.25
+langchain-community==0.0.38
+
+# Vector database - simple and reliable
+chromadb==0.4.24
+sentence-transformers==2.7.0
+
+# Data processing
+numpy==1.26.4
+pandas==2.2.2
+
+# Production server
+gunicorn==22.0.0
