@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BodyBae.ai - Love Your Body</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #A4B07E;
+            --secondary: #707C4F;
+            --accent: #424106;
+            --light: #D4CBBC;
+            --pink: #C6A6B5;
+            --brown: #6D4930;
+            --white: #ffffff;
+            --shadow: rgba(109, 73, 48, 0.1);
+            --shadow-hover: rgba(109, 73, 48, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, var(--pink) 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: var(--brown);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,117.3C1248,117,1344,139,1392,149.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') bottom center/cover no-repeat;
+        }
+
+        .welcome-content {
+            z-index: 2;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--white), var(--light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+            max-width: 600px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--pink), var(--primary));
+            color: var(--white);
+            padding: 18px 36px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px var(--shadow);
+            text-decoration: none;
+            display: inline-block;
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--brown);
+        }
+
+        /* Main App Container */
+        .app-container {
+            display: none;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-tab {
+            background: transparent;
+            border: none;
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Content Sections */
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* BMI Setup Section */
+        .bmi-setup {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .setup-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .setup-header h2 {
+            color: var(--brown);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .setup-header p {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--brown);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--light);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(164, 176, 126, 0.1);
+            background: var(--white);
+        }
+
+        .sex-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        .sex-option {
+            padding: 15px;
+            border: 2px solid var(--light);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .sex-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .sex-option.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .bmi-result {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .bmi-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .bmi-category {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, var(--light), var(--white));
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .card-title {
+            color: var(--brown);
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Goal Tracking */
+        .goal-input {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--light);
+            margin-bottom: 15px;
+        }
+
+        .goal-input h4 {
+            color: var(--brown);
+            margin-bottom: 15px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .input-row input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--light);
+            border-radius: 8px;
+        }
+
+        .log-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .log-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            height: 500px;
+            border: 2px solid var(--light);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--white);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: linear-gradient(to bottom, #fafafa, var(--white));
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--pink);
+        }
+
+        .message.bot .message-avatar {
+            background: var(--primary);
+        }
+
+        .message-content {
+            background: var(--white);
+            padding: 15px 20px;
+            border-radius: 18px;
+            max-width: 70%;
+            box-shadow: 0 2px 10px var(--shadow);
+            border: 1px solid var(--light);
+        }
+
+        .message.user .message-content {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            border-top: 1px solid var(--light);
+            background: var(--white);
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--light);
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+        }
+
+        .send-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        /* Progress Chart */
+        .progress-chart {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid var(--light);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sex-options {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 3rem;
+            }
+
+            .tagline {
+                font-size: 1.4rem;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-tab {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .input-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+        }
+
+        /* Animations */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--light);
+            border-radius: 50%;
+            border-top: 3px solid var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-content">
+            <div class="logo">BodyBae.ai</div>
+            <div class="tagline">Hello and Welcome to BodyBae!</div>
+            <div class="subtitle">A space where we will love your body! Transform your health journey with AI-powered personalized guidance, tracking, and motivation.</div>
+            <button class="btn" onclick="startJourney()">
+                <i class="fas fa-heart"></i> Start Your Journey
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="container">
+        <div class="app-container" id="appContainer">
+            <!-- Header -->
+            <div class="header">
+                <h1><i class="fas fa-heart"></i> BodyBae.ai</h1>
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="showSection('setup')" id="setupTab">
+                        <i class="fas fa-user-plus"></i> Setup
+                    </button>
+                    <button class="nav-tab" onclick="showSection('home')" id="homeTab" style="display: none;">
+                        <i class="fas fa-home"></i> Home
+                    </button>
+                    <button class="nav-tab" onclick="showSection('track')" id="trackTab" style="display: none;">
+                        <i class="fas fa-chart-line"></i> Track Goals
+                    </button>
+                    <button class="nav-tab" onclick="showSection('chat')" id="chatTab" style="display: none;">
+                        <i class="fas fa-comments"></i> Chat
+                    </button>
+                    <button class="nav-tab" onclick="showSection('progress')" id="progressTab" style="display: none;">
+                        <i class="fas fa-trophy"></i> Progress
+                    </button>
+                </div>
+            </div>
+
+            <!-- BMI Setup Section -->
+            <div class="content">
+                <div class="section active" id="setup">
+                    <div class="bmi-setup">
+                        <div class="setup-header">
+                            <h2><i class="fas fa-calculator"></i> Let's Set Up Your Profile</h2>
+                            <p>Tell us about yourself so we can provide personalized health guidance</p>
+                        </div>
+
+                        <form id="profileForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                                    <input type="text" id="name" class="form-input" placeholder="Enter your name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="age"><i class="fas fa-birthday-cake"></i> Age</label>
+                                    <input type="number" id="age" class="form-input" placeholder="Your age" min="13" max="120" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-venus-mars"></i> Sex (Biological)</label>
+                                <div class="sex-options">
+                                    <div class="sex-option" onclick="selectSex('male')">
+                                        <i class="fas fa-mars"></i><br>Male (Biological)
+                                    </div>
+                                    <div class="sex-option" onclick="selectSex('female')">
+                                        <i class="fas fa-venus"></i><br>Female (Biological)
+                                    </div>
+                                    <div class="sex-option" onclick="selectSex('prefer-not-to-say')">
+                                        <i class="fas fa-user"></i><br>Prefer not to mention
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="height"><i class="fas fa-ruler-vertical"></i> Height (cm)</label>
+                                    <input type="number" id="height" class="form-input" placeholder="Height in cm" min="100" max="250" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="weight"><i class="fas fa-weight"></i> Weight (kg)</label>
+                                    <input type="number" id="weight" class="form-input" placeholder="Weight in kg" min="30" max="300" step="0.1" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activity"><i class="fas fa-running"></i> Activity Level</label>
+                                <select id="activity" class="form-input" required>
+                                    <option value="">Select your activity level</option>
+                                    <option value="sedentary">Sedentary (little/no exercise)</option>
+                                    <option value="lightly_active">Lightly Active (light exercise 1-3 days/week)</option>
+                                    <option value="moderately_active">Moderately Active (moderate exercise 3-5 days/week)</option>
+                                    <option value="very_active">Very Active (hard exercise 6-7 days/week)</option>
+                                    <option value="extremely_active">Extremely Active (very hard exercise, physical job)</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">
+                                <i class="fas fa-calculator"></i> Calculate BMI & Continue
+                            </button>
+                        </form>
+
+                        <div class="bmi-result" id="bmiResult">
+                            <div class="bmi-value" id="bmiValue">0.0</div>
+                            <div class="bmi-category" id="bmiCategory">Calculating...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Home Dashboard -->
+                <div class="section" id="home">
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="currentWeight">0</div>
+                            <div class="stat-label">Current Weight (kg)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="currentBMI">0.0</div>
+                            <div class="stat-label">BMI</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="daysActive">0</div>
+                            <div class="stat-label">Days Active</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="goalProgress">0%</div>
+                            <div class="stat-label">Goal Progress</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <div class="card-title">Quick Chat</div>
+                            </div>
+                            <p>Ask me anything about fitness, nutrition, or your health goals!</p>
+                            <button class="btn" onclick="showSection('chat')" style="margin-top: 15px;">
+                                <i class="fas fa-comment"></i> Start Chatting
+                            </button>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-target"></i>
+                                </div>
+                                <div class="card-title">Track Today</div>
+                            </div>
+                            <p>Log your workouts, meals, and daily activities to stay on track.</p>
+                            <button class="btn" onclick="showSection('track')" style="margin-top: 15px;">
+                                <i class="fas fa-plus"></i> Log Activities
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goal Tracking Section -->
+                <div class="section" id="track">
+                    <h2 style="margin-bottom: 30px; color: var(--brown);">
+                        <i class="fas fa-bullseye"></i> Track Your Goals - What Did You Do Today?
+                    </h2>
+
+                    <div class="dashboard">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-dumbbell"></i>
+                                </div>
+                                <div class="card-title">Workout Tracking</div>
+                            </div>
+                            
+                            <div class="goal-input">
+                                <h4><i class="fas fa-running"></i> Today's Workout</h4>
+                                <div class="input-row" style="margin-bottom: 15px;">
+                                    <input type="text" id="workoutType" placeholder="Exercise type (e.g., Running, Gym, Yoga)">
+                                    <input type="number" id="workoutDuration" placeholder="Duration (minutes)">
+                                </div>
+                                <div class="input-row">
+                                    <input type="number" id="caloriesBurned" placeholder="Calories burned (optional)">
+                                    <button class="log-btn" onclick="logWorkout()">
+                                        <i class="fas fa-plus"></i> Log Workout
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="goal-input">
+                                <h4><i class="fas fa-weight"></i> Weight Check</h4>
+                                <div class="input-row">
+                                    <input type="number" id="todayWeight" placeholder="Today's weight (kg)" step="0.1">
+                                    <button class="log-btn" onclick="logWeight()">
+                                        <i class="fas fa-plus"></i> Log Weight
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="card-title">Diet Tracking</div>
+                            </div>
+                            
+                            <div class="goal-input">
+                                <h4><i class="fas fa-apple-alt"></i> Meals & Nutrition</h4>
+                                <div class="input-row" style="margin-bottom: 15px;">
+                                    <input type="text" id="mealType" placeholder="Meal (Breakfast, Lunch, Dinner, Snack)">
+                                    <input type="number" id="mealCalories" placeholder="Calories">
+                                </div>
+                                <div class="input-row">
+                                    <input type="text" id="mealDescription" placeholder="What did you eat?">
+                                    <button class="log-btn" onclick="logMeal()">
+                                        <i class="fas fa-plus"></i> Log Meal
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="goal-input">
+                                <h4><i class="fas fa-tint"></i> Hydration</h4>
+                                <div class="input-row">
+                                    <input type="number" id="waterIntake" placeholder="Water intake (glasses)">
+                                    <button class="log-btn" onclick="logWater()">
+                                        <i class="fas fa-plus"></i> Log Water
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card" style="margin-top: 20px;">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="card-title">How Are You Feeling?</div>
+                        </div>
+                        <div class="input-row">
+                            <select id="energyLevel" class="form-input">
+                                <option value="">Select energy level</option>
+                                <option value="1">1 - Very Low</option>
+                                <option value="2">2 - Low</option>
+                                <option value="3">3 - Below Average</option>
+                                <option value="4">4 - Fair</option>
+                                <option value="5">5 - Average</option>
+                                <option value="6">6 - Good</option>
+                                <option value="7">7 - Very Good</option>
+                                <option value="8">8 - Great</option>
+                                <option value="9">9 - Excellent</option>
+                                <option value="10">10 - Outstanding</option>
+                            </select>
+                            <input type="text" id="moodNotes" placeholder="Any notes about how you're feeling?" class="form-input">
+                            <button class="log-btn" onclick="logMood()">
+                                <i class="fas fa-plus"></i> Log Mood
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Section -->
+                <div class="section" id="chat">
+                    <h2 style="margin-bottom: 20px; color: var(--brown);">
+                        <i class="fas fa-robot"></i> Chat with Your AI Health Assistant
+                    </h2>
+                    
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message bot slide-in">
+                                <div class="message-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message-content">
+                                    <p>Hi there! I'm your personal health and fitness assistant. I can help you with:</p>
+                                    <ul style="margin: 10px 0; padding-left: 20px;">
+                                        <li>Workout recommendations</li>
+                                        <li>Nutrition advice</li>
+                                        <li>Progress analysis</li>
+                                        <li>Motivation and tips</li>
+                                        <li>Health questions</li>
+                                    </ul>
+                                    <p>What would you like to know about your health journey?</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <div class="chat-input-row">
+                                <input type="text" id="chatInput" class="chat-input" placeholder="Ask me about fitness, nutrition, or your goals..." onkeypress="handleChatKeyPress(event)">
+                                <button class="send-btn" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h3 style="color: var(--brown); margin-bottom: 15px;">Quick Questions:</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <button class="btn btn-secondary" onclick="askQuickQuestion('How many calories should I eat daily?')">
+                                Daily Calories
+                            </button>
+                            <button class="btn btn-secondary" onclick="askQuickQuestion('What exercises are best for weight loss?')">
+                                Weight Loss Tips
+                            </button>
+                            <button class="btn btn-secondary" onclick="askQuickQuestion('How much protein do I need?')">
+                                Protein Needs
+                            </button>
+                            <button class="btn btn-secondary" onclick="askQuickQuestion('Best time to workout?')">
+                                Workout Timing
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="section" id="progress">
+                    <h2 style="margin-bottom: 30px; color: var(--brown);">
+                        <i class="fas fa-chart-line"></i> Your Progress Journey
+                    </h2>
+
+                    <div class="quick-stats" style="margin-bottom: 30px;">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalWorkouts">0</div>
+                            <div class="stat-label">Total Workouts</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="avgCalories">0</div>
+                            <div class="stat-label">Avg Daily Calories</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="weightChange">0kg</div>
+                            <div class="stat-label">Weight Change</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="streakDays">0</div>
+                            <div class="stat-label">Current Streak</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-chart-area"></i>
+                                </div>
+                                <div class="card-title">Weight Progress</div>
+                            </div>
+                            <div class="progress-chart" id="weightChart">
+                                <div style="text-align: center;">
+                                    <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 20px; color: var(--primary);"></i>
+                                    <p>Your weight progress chart will appear here</p>
+                                    <p style="margin-top: 10px; opacity: 0.7;">Keep logging your weight to see trends!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="card-title">Activity Overview</div>
+                            </div>
+                            <div class="progress-chart" id="activityChart">
+                                <div style="text-align: center;">
+                                    <i class="fas fa-dumbbell" style="font-size: 3rem; margin-bottom: 20px; color: var(--secondary);"></i>
+                                    <p>Your activity summary will appear here</p>
+                                    <p style="margin-top: 10px; opacity: 0.7;">Log workouts to track your activity!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card" style="margin-top: 20px;">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-list"></i>
+                            </div>
+                            <div class="card-title">Recent Activity Log</div>
+                        </div>
+                        <div id="recentActivity">
+                            <p style="text-align: center; color: var(--secondary); padding: 20px;">
+                                <i class="fas fa-info-circle"></i> Start logging your activities to see your progress here!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let userProfile = null;
+        let selectedSex = null;
+        let activityLog = [];
+        let chatHistory = [];
+
+        // Start the journey
+        function startJourney() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to corresponding tab
+            const tabMap = {
+                'setup': 'setupTab',
+                'home': 'homeTab',
+                'track': 'trackTab',
+                'chat': 'chatTab',
+                'progress': 'progressTab'
+            };
+            
+            if (tabMap[sectionId]) {
+                document.getElementById(tabMap[sectionId]).classList.add('active');
+            }
+
+            // Update data when switching to certain sections
+            if (sectionId === 'progress') {
+                updateProgressStats();
+            } else if (sectionId === 'home') {
+                updateHomeStats();
+            }
+        }
+
+        // Sex selection
+        function selectSex(sex) {
+            selectedSex = sex;
+            document.querySelectorAll('.sex-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.closest('.sex-option').classList.add('selected');
+        }
+
+        // Calculate BMI
+        function calculateBMI(weight, height) {
+            const heightInMeters = height / 100;
+            return weight / (heightInMeters * heightInMeters);
+        }
+
+        function getBMICategory(bmi) {
+            if (bmi < 18.5) return { category: "Underweight", color: "#3498db" };
+            if (bmi < 25) return { category: "Normal Weight", color: "#2ecc71" };
+            if (bmi < 30) return { category: "Overweight", color: "#f39c12" };
+            return { category: "Obese", color: "#e74c3c" };
+        }
+
+        // Form submission
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const name = formData.get('name');
+            const age = parseInt(formData.get('age'));
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const activity = formData.get('activity');
+
+            if (!selectedSex) {
+                alert('Please select your biological sex');
+                return;
+            }
+
+            // Calculate BMI
+            const bmi = calculateBMI(weight, height);
+            const bmiInfo = getBMICategory(bmi);
+
+            // Store user profile
+            userProfile = {
+                name,
+                age,
+                sex: selectedSex,
+                height,
+                weight,
+                activity,
+                bmi,
+                bmiCategory: bmiInfo.category,
+                createdAt: new Date().toISOString()
+            };
+
+            // Show BMI result
+            document.getElementById('bmiValue').textContent = bmi.toFixed(1);
+            document.getElementById('bmiCategory').textContent = bmiInfo.category;
+            document.getElementById('bmiResult').style.display = 'block';
+            document.getElementById('bmiResult').style.background = `linear-gradient(135deg, ${bmiInfo.color}, var(--secondary))`;
+
+            // Send to backend
+            try {
+                const response = await fetch('/onboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        age,
+                        height,
+                        weight,
+                        sex: selectedSex,
+                        activity_level: activity
+                    }),
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Show navigation tabs
+                    document.querySelectorAll('.nav-tab').forEach(tab => {
+                        tab.style.display = 'block';
+                    });
+                    
+                    // Switch to home after 3 seconds
+                    setTimeout(() => {
+                        showSection('home');
+                        updateHomeStats();
+                    }, 3000);
+                    
+                    showAlert(`Welcome ${name}! Your profile has been created successfully.`, 'success');
+                } else {
+                    showAlert('Error creating profile. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Network error. Please check your connection.', 'error');
+            }
+        });
+
+        // Activity logging functions
+        function logWorkout() {
+            const type = document.getElementById('workoutType').value;
+            const duration = document.getElementById('workoutDuration').value;
+            const calories = document.getElementById('caloriesBurned').value;
+
+            if (!type || !duration) {
+                showAlert('Please fill in workout type and duration', 'error');
+                return;
+            }
+
+            const workout = {
+                type: 'workout',
+                workoutType: type,
+                duration: parseInt(duration),
+                calories: calories ? parseInt(calories) : null,
+                timestamp: new Date().toISOString()
+            };
+
+            activityLog.push(workout);
+            
+            // Clear inputs
+            document.getElementById('workoutType').value = '';
+            document.getElementById('workoutDuration').value = '';
+            document.getElementById('caloriesBurned').value = '';
+
+            showAlert(`Workout logged: ${type} for ${duration} minutes!`, 'success');
+            logToBackend(workout);
+        }
+
+        function logWeight() {
+            const weight = document.getElementById('todayWeight').value;
+            
+            if (!weight) {
+                showAlert('Please enter your weight', 'error');
+                return;
+            }
+
+            const weightLog = {
+                type: 'weight',
+                weight: parseFloat(weight),
+                timestamp: new Date().toISOString()
+            };
+
+            activityLog.push(weightLog);
+            
+            // Update user profile
+            if (userProfile) {
+                userProfile.weight = parseFloat(weight);
+                userProfile.bmi = calculateBMI(userProfile.weight, userProfile.height);
+                userProfile.bmiCategory = getBMICategory(userProfile.bmi).category;
+            }
+
+            document.getElementById('todayWeight').value = '';
+            showAlert(`Weight logged: ${weight} kg`, 'success');
+            logToBackend(weightLog);
+        }
+
+        function logMeal() {
+            const type = document.getElementById('mealType').value;
+            const calories = document.getElementById('mealCalories').value;
+            const description = document.getElementById('mealDescription').value;
+
+            if (!type || !description) {
+                showAlert('Please fill in meal type and description', 'error');
+                return;
+            }
+
+            const meal = {
+                type: 'meal',
+                mealType: type,
+                calories: calories ? parseInt(calories) : null,
+                description: description,
+                timestamp: new Date().toISOString()
+            };
+
+            activityLog.push(meal);
+            
+            // Clear inputs
+            document.getElementById('mealType').value = '';
+            document.getElementById('mealCalories').value = '';
+            document.getElementById('mealDescription').value = '';
+
+            showAlert(`Meal logged: ${type}`, 'success');
+            logToBackend(meal);
+        }
+
+        function logWater() {
+            const glasses = document.getElementById('waterIntake').value;
+            
+            if (!glasses) {
+                showAlert('Please enter water intake', 'error');
+                return;
+            }
+
+            const water = {
+                type: 'water',
+                glasses: parseInt(glasses),
+                timestamp: new Date().toISOString()
+            };
+
+            activityLog.push(water);
+            document.getElementById('waterIntake').value = '';
+            showAlert(`Water intake logged: ${glasses} glasses`, 'success');
+            logToBackend(water);
+        }
+
+        function logMood() {
+            const energy = document.getElementById('energyLevel').value;
+            const notes = document.getElementById('moodNotes').value;
+
+            if (!energy) {
+                showAlert('Please select your energy level', 'error');
+                return;
+            }
+
+            const mood = {
+                type: 'mood',
+                energyLevel: parseInt(energy),
+                notes: notes,
+                timestamp: new Date().toISOString()
+            };
+
+            activityLog.push(mood);
+            
+            // Clear inputs
+            document.getElementById('energyLevel').value = '';
+            document.getElementById('moodNotes').value = '';
+
+            showAlert(`Mood logged! Energy level: ${energy}/10`, 'success');
+            logToBackend(mood);
+        }
+
+        // Backend logging
+        async function logToBackend(logData) {
+            try {
+                const response = await fetch('/log_progress', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(logData),
+                });
+
+                const result = await response.json();
+                if (!result.success) {
+                    console.error('Backend logging failed:', result);
+                }
+            } catch (error) {
+                console.error('Error logging to backend:', error);
+            }
+        }
+
+        // Chat functions
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Show typing indicator
+            addTypingIndicator();
+
+            // Send to backend
+            setTimeout(() => {
+                processMessage(message);
+            }, 1000);
+        }
+
+        function askQuickQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            sendMessage();
+        }
+
+        function addMessage(content, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender} slide-in`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = sender === 'user' ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.innerHTML = `<p>${content}</p>`;
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(messageContent);
+            messagesContainer.appendChild(messageDiv);
+
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Store in chat history
+            chatHistory.push({ content, sender, timestamp: new Date().toISOString() });
+        }
+
+        function addTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = '<i class="fas fa-robot"></i>';
+
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.innerHTML = '<div class="loading"></div>';
+
+            typingDiv.appendChild(avatar);
+            typingDiv.appendChild(messageContent);
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        async function processMessage(message) {
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        message: message,
+                        userProfile: userProfile,
+                        activityLog: activityLog.slice(-10) // Send last 10 activities for context
+                    }),
+                });
+
+                const result = await response.json();
+                removeTypingIndicator();
+                
+                if (result.response) {
+                    addMessage(result.response, 'bot');
+                } else {
+                    addMessage("I'm sorry, I'm having trouble processing your request right now. Please try again.", 'bot');
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage("I'm having connection issues. Please check your internet and try again.", 'bot');
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Stats update functions
+        function updateHomeStats() {
+            if (!userProfile) return;
+
+            document.getElementById('currentWeight').textContent = userProfile.weight || 0;
+            document.getElementById('currentBMI').textContent = userProfile.bmi ? userProfile.bmi.toFixed(1) : '0.0';
+            
+            // Calculate days active
+            const daysActive = activityLog.filter(log => log.type === 'workout').length;
+            document.getElementById('daysActive').textContent = daysActive;
+            
+            // Simple progress calculation (this could be enhanced)
+            document.getElementById('goalProgress').textContent = Math.min(daysActive * 10, 100) + '%';
+        }
+
+        function updateProgressStats() {
+            const workouts = activityLog.filter(log => log.type === 'workout');
+            const meals = activityLog.filter(log => log.type === 'meal');
+            const weights = activityLog.filter(log => log.type === 'weight');
+
+            document.getElementById('totalWorkouts').textContent = workouts.length;
+            
+            // Calculate average calories
+            const totalCalories = meals.reduce((sum, meal) => sum + (meal.calories || 0), 0);
+            const avgCalories = meals.length > 0 ? Math.round(totalCalories / meals.length) : 0;
+            document.getElementById('avgCalories').textContent = avgCalories;
+
+            // Calculate weight change
+            if (weights.length >= 2) {
+                const firstWeight = weights[0].weight;
+                const lastWeight = weights[weights.length - 1].weight;
+                const change = (lastWeight - firstWeight).toFixed(1);
+                document.getElementById('weightChange').textContent = (change > 0 ? '+' : '') + change + 'kg';
+            }
+
+            // Calculate streak (simplified)
+            document.getElementById('streakDays').textContent = Math.min(activityLog.length, 30);
+
+            updateRecentActivity();
+        }
+
+        function updateRecentActivity() {
+            const container = document.getElementById('recentActivity');
+            const recent = activityLog.slice(-5).reverse();
+
+            if (recent.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--secondary); padding: 20px;"><i class="fas fa-info-circle"></i> Start logging your activities to see your progress here!</p>';
+                return;
+            }
+
+            let html = '';
+            recent.forEach(activity => {
+                const date = new Date(activity.timestamp).toLocaleDateString();
+                const time = new Date(activity.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                let icon, text;
+                switch(activity.type) {
+                    case 'workout':
+                        icon = 'fas fa-dumbbell';
+                        text = `${activity.workoutType} for ${activity.duration} minutes`;
+                        break;
+                    case 'meal':
+                        icon = 'fas fa-utensils';
+                        text = `${activity.mealType}: ${activity.description}`;
+                        break;
+                    case 'weight':
+                        icon = 'fas fa-weight';
+                        text = `Weight: ${activity.weight} kg`;
+                        break;
+                    case 'water':
+                        icon = 'fas fa-tint';
+                        text = `${activity.glasses} glasses of water`;
+                        break;
+                    case 'mood':
+                        icon = 'fas fa-heart';
+                        text = `Energy level: ${activity.energyLevel}/10`;
+                        break;
+                    default:
+                        icon = 'fas fa-circle';
+                        text = 'Activity logged';
+                }
+
+                html += `
+                    <div style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid var(--light); background: #fafafa; margin-bottom: 10px; border-radius: 8px;">
+                        <i class="${icon}" style="color: var(--primary); margin-right: 15px; font-size: 1.2rem;"></i>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: var(--brown);">${text}</div>
+                            <div style="font-size: 0.9rem; color: var(--secondary);">${date} at ${time}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Alert system
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${type}`;
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+                box-shadow: 0 5px 15px var(--shadow);
+            `;
+            
+            if (type === 'success') {
+                alertDiv.style.background = 'linear-gradient(45deg, var(--primary), var(--secondary))';
+            } else {
+                alertDiv.style.background = 'linear-gradient(45deg, #e74c3c, #c0392b)';
+            }
+            
+            alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'}"></i> ${message}`;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus on name input
+            document.getElementById('name').focus();
+            
+            // Add some sample motivational chat
+            setTimeout(() => {
+                if (chatHistory.length === 1) { // Only initial bot message
+                    addMessage("💡 Tip: I can help you create personalized workout plans, suggest healthy recipes, and answer any health questions you have!", 'bot');
+                }
+            }, 5000);
+        });
+
+        // Add CSS animation for slideOut
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                to {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
