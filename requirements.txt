@@ -1,0 +1,12 @@
+# Core dependencies for BodyBae - Render Free Tier Compatible
+streamlit==1.28.1
+torch==2.0.1
+transformers==4.35.0
+sentence-transformers==2.2.2
+numpy==1.24.3
+scikit-learn==1.3.0
+plotly==5.17.0
+python-dotenv==1.0.0
+
+# Keep it lightweight for free tier
+# Total size should be under 512MB for Render free tier
