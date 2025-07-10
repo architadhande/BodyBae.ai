@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BodyBae.ai - AI Health & Fitness Chatbot</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --sage-green: #A4B07E;
+            --olive-green: #707C4F;
+            --dark-green: #424106;
+            --cream: #d4cbbc;
+            --mauve: #C6A6B5;
+            --brown: #6D4930;
+            --white: #ffffff;
+            --light-cream: #f9f7f4;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--sage-green), var(--olive-green));
+            --gradient-secondary: linear-gradient(135deg, var(--mauve), var(--brown));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--dark-green);
+            overflow-x: hidden;
+        }
+
+        /* Welcome Screen with Wave Design */
+        .welcome-screen {
+            min-height: 100vh;
+            background: var(--gradient-primary);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: var(--light-cream);
+            clip-path: ellipse(100% 100% at 50% 100%);
+            z-index: 1;
+        }
+
+        .welcome-screen::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: var(--cream);
+            clip-path: ellipse(80% 100% at 30% 100%);
+            z-index: 2;
+        }
+
+        .wave-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,133.3C672,139,768,181,864,181.3C960,181,1056,139,1152,128C1248,117,1344,139,1392,149.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .welcome-content {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--cream), var(--mauve));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            opacity: 0.85;
+        }
+
+        .cta-button {
+            background: var(--gradient-secondary);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Chat Screen */
+        .chat-screen {
+            display: none;
+            min-height: 100vh;
+            background: var(--light-cream);
+            padding: 2rem 0;
+        }
+
+        .chat-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            height: calc(100vh - 4rem);
+        }
+
+        /* Main Chat Area */
+        .chat-main {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--sage-green);
+        }
+
+        .chat-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: white;
+            clip-path: ellipse(100% 100% at 50% 0%);
+        }
+
+        .chat-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            background: linear-gradient(to bottom, white, var(--light-cream));
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1.2rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            line-height: 1.6;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--gradient-primary);
+            color: white;
+            border-bottom-right-radius: 8px;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: white;
+            color: var(--dark-green);
+            border: 1px solid var(--cream);
+            border-bottom-left-radius: 8px;
+        }
+
+        .message.system {
+            align-self: center;
+            background: var(--cream);
+            color: var(--brown);
+            border-radius: 15px;
+            font-size: 0.9rem;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            border-bottom-left-radius: 8px;
+            display: none;
+            border: 1px solid var(--cream);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--sage-green);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        .chat-input-area {
+            padding: 1.5rem 2rem;
+            background: white;
+            border-top: 1px solid var(--cream);
+        }
+
+        .quick-suggestions {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-chip {
+            background: var(--cream);
+            color: var(--dark-green);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .suggestion-chip:hover {
+            background: var(--sage-green);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid var(--cream);
+            border-radius: 25px;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            resize: none;
+            max-height: 120px;
+            font-family: inherit;
+            background: var(--light-cream);
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--sage-green);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(164, 176, 126, 0.1);
+        }
+
+        .send-button {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Right Sidebar */
+        .chat-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px var(--shadow);
+            border: 1px solid var(--sage-green);
+        }
+
+        .card-title {
+            color: var(--olive-green);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* User Info Form */
+        .user-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--dark-green);
+        }
+
+        .form-input {
+            padding: 0.8rem;
+            border: 2px solid var(--cream);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: var(--light-cream);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--sage-green);
+            background: white;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
+        .gender-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .gender-option {
+            padding: 0.6rem 0.4rem;
+            border: 2px solid var(--cream);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--light-cream);
+            font-size: 0.8rem;
+            font-weight: 400;
+        }
+
+        .gender-option:hover,
+        .gender-option.selected {
+            border-color: var(--sage-green);
+            background: var(--sage-green);
+            color: white;
+        }
+
+        .activity-select {
+            padding: 0.8rem;
+            border: 2px solid var(--cream);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: var(--light-cream);
+            transition: all 0.3s ease;
+        }
+
+        .activity-select:focus {
+            outline: none;
+            border-color: var(--sage-green);
+            background: white;
+        }
+
+        .calculate-btn {
+            background: var(--gradient-secondary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* BMI Display */
+        .bmi-display {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--light-cream), var(--cream));
+            border-radius: 15px;
+            margin-top: 1rem;
+            border: 1px solid var(--sage-green);
+        }
+
+        .bmi-number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--olive-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .bmi-category {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--brown);
+            margin-bottom: 0.5rem;
+        }
+
+        .bmi-advice {
+            font-size: 0.9rem;
+            color: var(--dark-green);
+            line-height: 1.4;
+        }
+
+        /* User Profile Display */
+        .user-profile {
+            display: none;
+            background: linear-gradient(135deg, var(--sage-green), var(--olive-green));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-details {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .edit-profile {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .edit-profile:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .chat-container {
+                grid-template-columns: 1fr 300px;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .chat-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .chat-main {
+                height: 70vh;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.4rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .gender-options {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-suggestions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .chat-container {
+                padding: 0 1rem;
+            }
+            
+            .sidebar-card {
+                padding: 1.5rem;
+            }
+            
+            .chat-messages {
+                padding: 1.5rem;
+            }
+            
+            .message {
+                max-width: 85%;
+                padding: 1rem;
+            }
+        }
+
+        /* Success States */
+        .success-message {
+            background: linear-gradient(135deg, var(--sage-green), var(--olive-green));
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Error States */
+        .error-message {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="wave-bg"></div>
+        <div class="welcome-content">
+            <h1 class="logo">BodyBae.ai</h1>
+            <p class="tagline">AI Health & Fitness Chatbot</p>
+            <p class="subtitle">Your intelligent companion for a healthier lifestyle</p>
+            <button class="cta-button" onclick="startChat()">
+                <span>Start Chatting</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div id="chat-screen" class="chat-screen">
+        <div class="chat-container">
+            <!-- Main Chat Area -->
+            <div class="chat-main">
+                <div class="chat-header">
+                    <h2 class="chat-title">💬 BodyBae AI Assistant</h2>
+                    <p class="chat-subtitle">Your personal health & fitness expert</p>
+                </div>
+                
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot">
+                        Hi there! 👋 I'm BodyBae, your AI health and fitness assistant. I'm here to help you with personalized advice, workout plans, nutrition guidance, and motivation. 
+                        <br><br>
+                        To get started, please fill out your profile on the right, and then we can chat about your health goals! 
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typing-indicator">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="quick-suggestions">
+                        <button class="suggestion-chip" onclick="sendQuickMessage('What should I eat for breakfast?')">Breakfast ideas</button>
+                        <button class="suggestion-chip" onclick="sendQuickMessage('Give me a quick workout plan')">Workout plan</button>
+                        <button class="suggestion-chip" onclick="sendQuickMessage('I need motivation today')">Motivation</button>
+                        <button class="suggestion-chip" onclick="sendQuickMessage('How much water should I drink?')">Hydration tips</button>
+                    </div>
+                    
+                    <div class="input-wrapper">
+                        <textarea 
+                            class="chat-input" 
+                            id="chat-input" 
+                            placeholder="Ask me anything about health, fitness, nutrition..."
+                            rows="1"
+                        ></textarea>
+                        <button class="send-button" id="send-button" onclick="sendMessage()">
+                            ➤
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="chat-sidebar">
+                <!-- User Profile -->
+                <div class="sidebar-card">
+                    <div class="user-profile" id="user-profile">
+                        <div class="profile-name" id="profile-name"></div>
+                        <div class="profile-details" id="profile-details"></div>
+                        <button class="edit-profile" onclick="editProfile()">Edit Profile</button>
+                    </div>
+
+                    <div class="user-form" id="user-form">
+                        <h3 class="card-title">👤 Your Profile</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-input" id="name" placeholder="Enter your name">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Age</label>
+                                <input type="number" class="form-input" id="age" min="13" max="100" placeholder="25">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Gender</label>
+                                <div class="gender-options">
+                                    <div class="gender-option" data-value="male">M</div>
+                                    <div class="gender-option" data-value="female">F</div>
+                                    <div class="gender-option" data-value="prefer_not_to_say">Other</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Height (cm)</label>
+                                <input type="number" class="form-input" id="height" min="100" max="250" placeholder="170">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Weight (kg)</label>
+                                <input type="number" class="form-input" id="weight" min="30" max="300" step="0.1" placeholder="70">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Activity Level</label>
+                            <select class="activity-select" id="activity-level">
+                                <option value="">Select activity level</option>
+                                <option value="sedentary">Sedentary (Little/no exercise)</option>
+                                <option value="lightly_active">Lightly Active (1-3 days/week)</option>
+                                <option value="moderately_active">Moderately Active (3-5 days/week)</option>
+                                <option value="very_active">Very Active (6-7 days/week)</option>
+                                <option value="extremely_active">Extremely Active (2x/day, intense)</option>
+                            </select>
+                        </div>
+
+                        <button class="calculate-btn" id="calculate-btn" onclick="calculateBMI()">
+                            Calculate BMI & Save Profile
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BMI Calculator -->
+                <div class="sidebar-card">
+                    <h3 class="card-title">📊 Your BMI</h3>
+                    <div class="bmi-display" id="bmi-display">
+                        <div style="color: var(--brown); font-size: 1rem;">
+                            Fill out your profile above to calculate your BMI and get personalized health insights!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let selectedGender = null;
+        let chatInitialized = false;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            
+            // Check for saved user data
+            const savedUser = localStorage.getItem('bodybae_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                if (currentUser.bmi_info) {
+                    showUserProfile();
+                }
+            }
+        });
+
+        function setupEventListeners() {
+            // Gender selection
+            document.querySelectorAll('.gender-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.gender-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedGender = this.dataset.value;
+                });
+            });
+
+            // Chat input handling
+            const chatInput = document.getElementById('chat-input');
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+
+            // Form validation
+            const formInputs = ['name', 'age', 'height', 'weight'];
+            formInputs.forEach(inputId => {
+                document.getElementById(inputId).addEventListener('input', validateForm);
+            });
+            document.getElementById('activity-level').addEventListener('change', validateForm);
+        }
+
+        function startChat() {
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('chat-screen').style.display = 'block';
+            chatInitialized = true;
+        }
+
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const age = document.getElementById('age').value;
+            const height = document.getElementById('height').value;
+            const weight = document.getElementById('weight').value;
+            const activityLevel = document.getElementById('activity-level').value;
+            
+            const isValid = name && age && height && weight && selectedGender && activityLevel;
+            document.getElementById('calculate-btn').disabled = !isValid;
+        }
+
+        async function calculateBMI() {
+            const button = document.getElementById('calculate-btn');
+            const originalText = button.textContent;
+            button.innerHTML = '<span class="spinner"></span> Calculating...';
+            button.disabled = true;
+
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                age: parseInt(document.getElementById('age').value),
+                height: parseFloat(document.getElementById('height').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                sex: selectedGender,
+                activity_level: document.getElementById('activity-level').value
+            };
+
+            try {
+                const response = await fetch('/onboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentUser = {
+                        ...formData,
+                        user_id: result.user_id,
+                        bmr: result.bmr,
+                        tdee: result.tdee,
+                        bmi_info: result.bmi_info
+                    };
+                    
+                    localStorage.setItem('bodybae_user', JSON.stringify(currentUser));
+                    showUserProfile();
+                    displayBMI();
+                    
+                    // Add success message to chat
+                    addSystemMessage(`✅ Profile saved! Your BMI is ${result.bmi_info.bmi} (${result.bmi_info.category}). I'm now ready to give you personalized advice!`);
+                    
+                } else {
+                    throw new Error(result.error || 'Failed to calculate BMI');
+                }
+            } catch (error) {
+                console.error('BMI calculation error:', error);
+                showError('Failed to calculate BMI. Please check your internet connection and try again.');
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        function showUserProfile() {
+            if (!currentUser) return;
+            
+            document.getElementById('user-form').style.display = 'none';
+            document.getElementById('user-profile').style.display = 'block';
+            
+            document.getElementById('profile-name').textContent = `Hello, ${currentUser.name}! 👋`;
+            document.getElementById('profile-details').innerHTML = `
+                Age: ${currentUser.age} • ${currentUser.sex === 'male' ? 'Male' : currentUser.sex === 'female' ? 'Female' : 'Other'}<br>
+                ${currentUser.height}cm • ${currentUser.weight}kg<br>
+                Activity: ${currentUser.activity_level.replace('_', ' ')}
+            `;
+        }
+
+        function editProfile() {
+            document.getElementById('user-profile').style.display = 'none';
+            document.getElementById('user-form').style.display = 'block';
+            
+            if (currentUser) {
+                // Populate form with current data
+                document.getElementById('name').value = currentUser.name;
+                document.getElementById('age').value = currentUser.age;
+                document.getElementById('height').value = currentUser.height;
+                document.getElementById('weight').value = currentUser.weight;
+                document.getElementById('activity-level').value = currentUser.activity_level;
+                
+                // Select gender
+                selectedGender = currentUser.sex;
+                document.querySelectorAll('.gender-option').forEach(option => {
+                    option.classList.toggle('selected', option.dataset.value === selectedGender);
+                });
+                
+                validateForm();
+            }
+        }
+
+        function displayBMI() {
+            if (!currentUser || !currentUser.bmi_info) return;
+            
+            const bmiDisplay = document.getElementById('bmi-display');
+            const bmiInfo = currentUser.bmi_info;
+            
+            // Determine BMI color based on category
+            let bmiColor = '--olive-green';
+            if (bmiInfo.category === 'Underweight') bmiColor = '--mauve';
+            else if (bmiInfo.category === 'Overweight') bmiColor = '--brown';
+            else if (bmiInfo.category === 'Obese') bmiColor = '--dark-green';
+            
+            bmiDisplay.innerHTML = `
+                <div class="bmi-number" style="color: var(${bmiColor})">${bmiInfo.bmi}</div>
+                <div class="bmi-category">${bmiInfo.category}</div>
+                <div class="bmi-advice">${bmiInfo.advice}</div>
+            `;
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('chat-input').value = message;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            addUserMessage(message);
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Disable send button and show typing
+            const sendButton = document.getElementById('send-button');
+            sendButton.disabled = true;
+            showTypingIndicator();
+
+            try {
+                // Prepare request data
+                const requestData = { message };
+                
+                // Add user profile if available
+                if (currentUser) {
+                    requestData.userProfile = currentUser;
+                }
+
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                const result = await response.json();
+                hideTypingIndicator();
+
+                if (result.response) {
+                    addBotMessage(result.response);
+                    
+                    // Show personalized tips if available
+                    if (result.personalized_tips && result.personalized_tips.length > 0) {
+                        setTimeout(() => {
+                            addSystemMessage(`💡 Tip: ${result.personalized_tips[0]}`);
+                        }, 1000);
+                    }
+                } else {
+                    throw new Error('No response received');
+                }
+            } catch (error) {
+                console.error('Chat error:', error);
+                hideTypingIndicator();
+                addBotMessage('Sorry, I\'m having trouble responding right now. Please check your connection and try again! 😔');
+            } finally {
+                sendButton.disabled = false;
+            }
+        }
+
+        function addUserMessage(message) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.textContent = message;
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addBotMessage(message) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.textContent = message;
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addSystemMessage(message) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system';
+            messageDiv.textContent = message;
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typing-indicator').style.display = 'block';
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typing-indicator').style.display = 'none';
+        }
+
+        function scrollToBottom() {
+            const messagesContainer = document.getElementById('chat-messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showError(message) {
+            const bmiDisplay = document.getElementById('bmi-display');
+            bmiDisplay.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+
+        function showSuccess(message) {
+            const bmiDisplay = document.getElementById('bmi-display');
+            bmiDisplay.innerHTML = `<div class="success-message">${message}</div>`;
+            setTimeout(() => {
+                if (currentUser && currentUser.bmi_info) {
+                    displayBMI();
+                }
+            }, 3000);
+        }
+
+        // Enhanced chat with suggestions based on user profile
+        function getPersonalizedSuggestions() {
+            if (!currentUser || !currentUser.bmi_info) {
+                return [
+                    'What should I eat for breakfast?',
+                    'Give me a quick workout plan',
+                    'I need motivation today',
+                    'How much water should I drink?'
+                ];
+            }
+
+            const suggestions = [];
+            const bmiCategory = currentUser.bmi_info.category;
+            
+            if (bmiCategory === 'Underweight') {
+                suggestions.push('How can I gain weight healthily?');
+                suggestions.push('What foods help with muscle building?');
+            } else if (bmiCategory === 'Overweight' || bmiCategory === 'Obese') {
+                suggestions.push('What\'s the best diet for weight loss?');
+                suggestions.push('Low-impact exercises for beginners');
+            } else {
+                suggestions.push('How to maintain my current weight?');
+                suggestions.push('Best exercises for overall fitness');
+            }
+
+            if (currentUser.age > 40) {
+                suggestions.push('Age-appropriate workout routines');
+            } else {
+                suggestions.push('High-intensity workout ideas');
+            }
+
+            suggestions.push('I need motivation today');
+            
+            return suggestions.slice(0, 4);
+        }
+
+        // Update suggestions when user profile is loaded
+        function updateSuggestions() {
+            const suggestions = getPersonalizedSuggestions();
+            const suggestionContainer = document.querySelector('.quick-suggestions');
+            
+            suggestionContainer.innerHTML = '';
+            suggestions.forEach(suggestion => {
+                const button = document.createElement('button');
+                button.className = 'suggestion-chip';
+                button.textContent = suggestion;
+                button.onclick = () => sendQuickMessage(suggestion);
+                suggestionContainer.appendChild(button);
+            });
+        }
+
+        // Auto-save form data
+        function autoSaveForm() {
+            const formData = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                height: document.getElementById('height').value,
+                weight: document.getElementById('weight').value,
+                sex: selectedGender,
+                activity_level: document.getElementById('activity-level').value
+            };
+            
+            localStorage.setItem('bodybae_form_draft', JSON.stringify(formData));
+        }
+
+        // Load form draft
+        function loadFormDraft() {
+            const draft = localStorage.getItem('bodybae_form_draft');
+            if (draft && !currentUser) {
+                const formData = JSON.parse(draft);
+                
+                if (formData.name) document.getElementById('name').value = formData.name;
+                if (formData.age) document.getElementById('age').value = formData.age;
+                if (formData.height) document.getElementById('height').value = formData.height;
+                if (formData.weight) document.getElementById('weight').value = formData.weight;
+                if (formData.activity_level) document.getElementById('activity-level').value = formData.activity_level;
+                
+                if (formData.sex) {
+                    selectedGender = formData.sex;
+                    document.querySelectorAll('.gender-option').forEach(option => {
+                        option.classList.toggle('selected', option.dataset.value === selectedGender);
+                    });
+                }
+                
+                validateForm();
+            }
+        }
+
+        // Initialize form auto-save
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFormDraft();
+            
+            // Add auto-save listeners
+            ['name', 'age', 'height', 'weight', 'activity-level'].forEach(id => {
+                document.getElementById(id).addEventListener('input', autoSaveForm);
+            });
+        });
+
+        // Clear draft when profile is saved
+        function clearFormDraft() {
+            localStorage.removeItem('bodybae_form_draft');
+        }
+
+        // Update calculateBMI to clear draft
+        async function calculateBMI() {
+            const button = document.getElementById('calculate-btn');
+            const originalText = button.textContent;
+            button.innerHTML = '<span class="spinner"></span> Calculating...';
+            button.disabled = true;
+
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                age: parseInt(document.getElementById('age').value),
+                height: parseFloat(document.getElementById('height').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                sex: selectedGender,
+                activity_level: document.getElementById('activity-level').value
+            };
+
+            try {
+                const response = await fetch('/onboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentUser = {
+                        ...formData,
+                        user_id: result.user_id,
+                        bmr: result.bmr,
+                        tdee: result.tdee,
+                        bmi_info: result.bmi_info
+                    };
+                    
+                    localStorage.setItem('bodybae_user', JSON.stringify(currentUser));
+                    clearFormDraft(); // Clear the draft
+                    showUserProfile();
+                    displayBMI();
+                    updateSuggestions(); // Update chat suggestions
+                    
+                    // Add success message to chat
+                    addSystemMessage(`✅ Profile saved! Your BMI is ${result.bmi_info.bmi} (${result.bmi_info.category}). I'm now ready to give you personalized advice!`);
+                    
+                } else {
+                    throw new Error(result.error || 'Failed to calculate BMI');
+                }
+            } catch (error) {
+                console.error('BMI calculation error:', error);
+                showError('Failed to calculate BMI. Please check your internet connection and try again.');
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        // Initialize suggestions on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (currentUser && currentUser.bmi_info) {
+                updateSuggestions();
+                showUserProfile();
+                displayBMI();
+            }
+        });
+    </script>
+</body>
+</html>
