@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BodyBae.ai - Your AI Fitness Companion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" stroke="#7FB069" stroke-width="3"/>
+                    <path d="M20 10 L25 15 L20 20 L15 15 Z" fill="#7FB069"/>
+                    <path d="M20 20 L25 25 L20 30 L15 25 Z" fill="#588157"/>
+                </svg>
+                <h1>BodyBae.ai</h1>
+            </div>
+            <p class="tagline">Your AI-Powered Fitness Companion</p>
+        </header>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div id="chat-messages" class="chat-messages">
+                <!-- Welcome Message -->
+                <div class="message bot-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Welcome to BodyBae! 👋 I'm your personal AI fitness companion.</p>
+                        <p>I can help you:</p>
+                        <ul>
+                            <li>Set realistic fitness goals</li>
+                            <li>Track your progress</li>
+                            <li>Answer health and fitness questions</li>
+                            <li>Provide daily tips and motivation</li>
+                        </ul>
+                        <p>Type "start" to begin your fitness journey or ask me anything!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <input 
+                    type="text" 
+                    id="user-input" 
+                    placeholder="Type your message here..."
+                    autocomplete="off"
+                >
+                <button id="send-button" class="send-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="action-button" data-action="goals">Set Goals</button>
+            <button class="action-button" data-action="progress">Log Progress</button>
+            <button class="action-button" data-action="tip">Daily Tip</button>
+            <button class="action-button" data-action="faq">Ask Question</button>
+        </div>
+    </div>
+
+    <!-- User Form Modal -->
+    <div id="user-form-modal" class="modal">
+        <div class="modal-content">
+            <h2>Let's Get to Know You!</h2>
+            <form id="user-profile-form">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" min="13" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (cm):</label>
+                    <input type="number" id="height" name="height" min="100" max="250" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (lbs):</label>
+                    <input type="number" id="weight" name="weight" min="50" max="500" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="sex">Sex:</label>
+                    <select id="sex" name="sex" required>
+                        <option value="">Select...</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="activity_level">Activity Level:</label>
+                    <select id="activity_level" name="activity_level" required>
+                        <option value="">Select...</option>
+                        <option value="sedentary">Sedentary (little to no exercise)</option>
+                        <option value="lightly_active">Lightly Active (1-3 days/week)</option>
+                        <option value="moderately_active">Moderately Active (3-5 days/week)</option>
+                        <option value="very_active">Very Active (6-7 days/week)</option>
+                        <option value="extra_active">Extra Active (physical job + exercise)</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-button">Start My Journey!</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
