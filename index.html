@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BodyBae.ai - Your Fitness Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>BodyBae.ai</h1>
+            <p>Your personal fitness assistant</p>
+        </header>
+        
+        <div class="chat-box" id="chatBox">
+            <!-- Messages will appear here -->
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Type your message here...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let userId = 'user_' + Math.random().toString(36).substr(2, 9);
+        let onboardingComplete = false;
+
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            const typingIndicator = addMessage('bot', '...', true);
+            
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove typing indicator
+                document.getElementById(typingIndicator).remove();
+                
+                // Handle response
+                if (data.onboarding_complete) {
+                    onboardingComplete = true;
+                }
+                
+                if (data.options) {
+                    // Show quick reply options
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'options-container';
+                    data.options.forEach(option => {
+                        const btn = document.createElement('button');
+                        btn.textContent = option;
+                        btn.onclick = () => {
+                            document.getElementById('userInput').value = option;
+                            sendMessage();
+                        };
+                        optionsDiv.appendChild(btn);
+                    });
+                    addMessage('bot', data.response, false, optionsDiv);
+                } else {
+                    addMessage('bot', data.response);
+                }
+                
+                // Scroll to bottom
+                const chatBox = document.getElementById('chatBox');
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById(typingIndicator).remove();
+                addMessage('bot', "Sorry, I'm having trouble connecting. Please try again.");
+            });
+        }
+
+        function addMessage(sender, text, isTyping = false, extraContent = null) {
+            const chatBox = document.getElementById('chatBox');
+            const messageDiv = document.createElement('div');
+            const id = 'msg-' + Date.now();
+            messageDiv.id = id;
+            messageDiv.className = `message ${sender}-message`;
+            
+            if (isTyping) {
+                messageDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            } else {
+                messageDiv.textContent = text;
+            }
+            
+            if (extraContent) {
+                messageDiv.appendChild(extraContent);
+            }
+            
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return id;
+        }
+
+        // Initial greeting
+        window.onload = function() {
+            setTimeout(() => {
+                addMessage('bot', "Welcome to BodyBae.ai! Let's get started with some basic information.");
+                addMessage('bot', "What's your name?");
+            }, 500);
+        };
+    </script>
+</body>
+</html>

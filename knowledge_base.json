@@ -1,0 +1,36 @@
+{
+  "qna": [
+    {
+      "question": "How much protein should I eat daily?",
+      "answer": "The general recommendation is 0.8-1.2g of protein per pound of body weight for active individuals. Those looking to build muscle may benefit from 1-1.5g per pound."
+    },
+    {
+      "question": "What's the best workout for beginners?",
+      "answer": "Start with full-body workouts 2-3 times per week, focusing on compound movements like squats, push-ups, and rows. Gradually increase intensity and complexity."
+    },
+    {
+      "question": "How often should I exercise?",
+      "answer": "Aim for at least 150 minutes of moderate aerobic activity or 75 minutes of vigorous activity weekly, plus strength training 2-3 times per week."
+    },
+    {
+      "question": "What's a healthy rate of weight loss?",
+      "answer": "A safe, sustainable rate is 0.5-1 kg (1-2 lbs) per week through a combination of diet and exercise."
+    },
+    {
+      "question": "Do I need to do cardio to lose fat?",
+      "answer": "While cardio helps create a calorie deficit, fat loss primarily comes from diet. Strength training helps preserve muscle during weight loss."
+    },
+    {
+      "question": "How important is sleep for fitness?",
+      "answer": "Very important! 7-9 hours of quality sleep helps with recovery, muscle growth, hormone regulation, and workout performance."
+    },
+    {
+      "question": "Should I eat before a workout?",
+      "answer": "A small meal or snack with carbs and protein 1-2 hours before training can provide energy without discomfort."
+    },
+    {
+      "question": "How long should I rest between sets?",
+      "answer": "For strength: 2-5 minutes. For hypertrophy: 30-90 seconds. For endurance: 30 seconds or less."
+    }
+  ]
+}
