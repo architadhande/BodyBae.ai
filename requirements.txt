@@ -1,20 +1,22 @@
-# Core dependencies (pinned to stable versions)
-fastapi==0.104.1
-uvicorn==0.24.0
-pydantic==2.5.0
+# Core
+fastapi==0.95.2
+uvicorn==0.22.0
+pydantic==1.10.7
 python-multipart==0.0.6
 
-# Lightweight RAG alternatives
-langchain==0.0.350
-openai==0.28.1
-sentence-transformers==2.2.2
+# RAG System
+langchain==0.0.198
+openai==0.27.8
 PyPDF2==3.0.1
+python-dotenv==0.21.1
+sentence-transformers==2.2.2
 
-# Compatible versions for Python 3.9-3.11 (Render's default)
-scikit-learn==1.0.2  # Lighter version that works universally
-python-dotenv==1.0.0
-numpy==1.24.3  # Widely compatible version
+# Compatibility Layer
+torch==1.12.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113
+numpy==1.21.6
+scipy==1.7.3
+scikit-learn==1.0.2
 
-# Explicitly include build tools
-setuptools==68.2.2
-wheel==0.41.3
+# Build
+setuptools==59.8.0
+wheel==0.37.1
