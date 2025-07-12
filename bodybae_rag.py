@@ -2,7 +2,7 @@ import os
 import json
 from typing import Dict, Optional, List
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from sentence_transformers import SentenceTransformer
+from langchain.embeddings import OpenAIEmbeddings
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from langchain.schema import Document
@@ -24,19 +24,39 @@ class RAGSystem:
             self._initialize_rag()
     
     def _initialize_rag(self):
-        """Initialize RAG components with sentence-transformers"""
-        try:
-            # Use lightweight sentence-transformers instead of OpenAI embeddings
-            self.embeddings = SentenceTransformer('all-MiniLM-L6-v2')
-            self.knowledge_base = self._load_knowledge_base()
+    """Initialize RAG components with OpenAI embeddings"""
+    try:
+        from langchain.embeddings import OpenAIEmbeddings
+        
+        # Initialize OpenAI embeddings
+        self.embeddings = OpenAIEmbeddings(
+            openai_api_key=self.api_key,
+            model="text-embedding-3-small",  # Efficient model
+            chunk_size=500  # Better for Render's memory limits
+        ) if self.api_key else None
+        
+        # Load knowledge base (PDF + built-in fitness knowledge)
+        self.knowledge_base = self._load_knowledge_base()
+        
+        # Generate embeddings only if API key is available
+        if self.embeddings:
+            # Convert documents to text for embedding
+            texts = [doc.page_content for doc in self.knowledge_base]
             
-            # Pre-compute document embeddings
-            self.doc_embeddings = self._create_embeddings()
-            
-            logger.info("RAG system initialized with sentence-transformers")
-        except Exception as e:
-            logger.error(f"Failed to initialize RAG system: {e}")
+            # Batch process to avoid memory issues
+            batch_size = 10  # Safe for free tier
+            self.doc_embeddings = []
+            for i in range(0, len(texts), batch_size):
+                batch = texts[i:i + batch_size]
+                self.doc_embeddings.extend(self.embeddings.embed_documents(batch))
+        else:
             self.use_fallback = True
+            
+        logger.info("RAG system initialized with OpenAI embeddings")
+        
+    except Exception as e:
+        logger.error(f"Failed to initialize RAG system: {e}")
+        self.use_fallback = True
 
     def _create_embeddings(self):
         """Create embeddings for all documents"""
@@ -47,55 +67,49 @@ class RAGSystem:
     # [Previous _extract_pdf_content, _load_knowledge_base methods remain unchanged]
 
     def get_response(self, query: str, user_profile: Optional[Dict] = None) -> str:
-        """Get response using similarity search with sentence-transformers"""
-        if self.use_fallback:
-            return self._get_fallback_response(query, user_profile)
-        
-        try:
-            # Add user context to query if available
-            context_query = query
-            if user_profile:
-                context = f"User profile: {user_profile.get('name', 'User')}, "
-                context += f"Age: {user_profile.get('age', 'unknown')}, "
-                context += f"BMI: {user_profile.get('bmi', 'unknown')}, "
-                context += f"Goal: {user_profile.get('goal', 'general fitness')}. "
-                context_query = context + query
-            
-            # Get most relevant document
-            query_embedding = self.embeddings.encode([context_query])
-            similarities = cosine_similarity(query_embedding, self.doc_embeddings)[0]
-            most_similar_idx = np.argmax(similarities)
-            
-            if similarities[most_similar_idx] > 0.6:  # Similarity threshold
-                return self.knowledge_base[most_similar_idx].page_content
-            return self._get_fallback_response(query, user_profile)
-            
-        except Exception as e:
-            logger.error(f"Error in RAG response: {e}")
-            return self._get_fallback_response(query, user_profile)
+    """Get response using OpenAI embeddings with efficient similarity search"""
+    if self.use_fallback or not self.embeddings:
+        return self._get_fallback_response(query, user_profile)
     
-    def get_response(self, query: str, user_profile: Optional[Dict] = None) -> str:
-        """Get response to user query using RAG or fallback"""
-        if self.use_fallback:
-            return self._get_fallback_response(query, user_profile)
+    try:
+        # 1. Add user context if available
+        context_query = query
+        if user_profile:
+            context = (
+                f"User profile: {user_profile.get('name', 'User')}, "
+                f"Age: {user_profile.get('age', 'unknown')}, "
+                f"BMI: {user_profile.get('bmi', 'unknown')}, "
+                f"Goal: {user_profile.get('goal', 'general fitness')}. "
+            )
+            context_query = context + query
+
+        # 2. Embed the query (single request)
+        query_embedding = self.embeddings.embed_query(context_query)
         
-        try:
-            # Add user context to query if available
-            context_query = query
-            if user_profile:
-                context = f"User profile: {user_profile.get('name', 'User')}, "
-                context += f"Age: {user_profile.get('age', 'unknown')}, "
-                context += f"BMI: {user_profile.get('bmi', 'unknown')}, "
-                context += f"Goal: {user_profile.get('goal', 'general fitness')}. "
-                context_query = context + query
-            
-            # Get response from conversation chain
-            result = self.conversation_chain({"question": context_query})
-            return result['answer']
+        # 3. Calculate cosine similarities manually (memory-efficient)
+        similarities = []
+        query_norm = np.linalg.norm(query_embedding)
         
-        except Exception as e:
-            logger.error(f"Error getting RAG response: {e}")
-            return self._get_fallback_response(query, user_profile)
+        for doc_embedding in self.doc_embeddings:
+            doc_norm = np.linalg.norm(doc_embedding)
+            if doc_norm == 0 or query_norm == 0:
+                similarity = 0
+            else:
+                similarity = np.dot(query_embedding, doc_embedding) / (query_norm * doc_norm)
+            similarities.append(similarity)
+        
+        # 4. Find best match
+        best_match_idx = np.argmax(similarities)
+        best_similarity = similarities[best_match_idx]
+        
+        # 5. Return response if confident, otherwise fallback
+        if best_similarity > 0.7:  # Adjust threshold as needed
+            return self.knowledge_base[best_match_idx].page_content
+        return self._get_fallback_response(query, user_profile)
+        
+    except Exception as e:
+        logger.error(f"Error in RAG response: {e}")
+        return self._get_fallback_response(query, user_profile)
     
     def _get_fallback_response(self, query: str, user_profile: Optional[Dict] = None) -> str:
         """Provide fallback responses when RAG is not available"""
