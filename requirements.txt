@@ -12,7 +12,6 @@ python-dotenv==0.21.1
 sentence-transformers==2.2.2
 
 # Compatibility Layer
-torch==1.12.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113
 numpy==1.21.6
 scipy==1.7.3
 scikit-learn==1.0.2
