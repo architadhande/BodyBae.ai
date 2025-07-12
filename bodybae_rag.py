@@ -27,7 +27,7 @@ class RAGSystem:
         """Initialize RAG components with sentence-transformers"""
         try:
             # Use lightweight sentence-transformers instead of OpenAI embeddings
-            self.embeddings = SentenceTransformer('all-MiniLM-L6-v2')
+            self.embeddings = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
             self.knowledge_base = self._load_knowledge_base()
             
             # Pre-compute document embeddings
