@@ -250,6 +250,39 @@ FAQ_KNOWLEDGE = {
 
         ]
     },
+    "bmr": {
+        "keywords": ["bmr", "what is bmr", "bmr meaning", "bmr formula", "basal metabolic rate"],
+        "responses": [
+            "BMR stands for Basal Metabolic Rate — the number of calories your body burns at rest to maintain vital functions like breathing, heart rate, and body temperature.",
+            "Your BMR represents the minimum energy your body requires to stay alive, even if you did nothing but rest all day.",
+            "The most common BMR formula is: (10 × weight in kg) + (6.25 × height in cm) - (5 × age) + 5 for men, and -161 for women.",
+            "BMR is the foundation for calculating TDEE, which adds calories for activity, digestion, and exercise.",
+            "Knowing your BMR helps you set accurate calorie targets for weight loss, maintenance, or muscle gain."
+        ]
+    },
+    "tdee": {
+        "keywords": ["tdee", "what is tdee", "tdee meaning", "tdee formula", "total daily energy expenditure"],
+        "responses": [
+            "TDEE stands for Total Daily Energy Expenditure — it’s the total number of calories you burn in a day, including activity, exercise, and digestion.",
+            "TDEE = BMR + calories burned from activity, exercise, and food digestion.",
+            "Your TDEE changes based on your activity level. The more active you are, the higher your TDEE.",
+            "Knowing your TDEE helps set calorie goals: eat below it to lose fat, above it to gain muscle.",
+            "To estimate your TDEE, multiply your BMR by an activity factor: sedentary (1.2), lightly active (1.375), moderately active (1.55), very active (1.725), or extra active (1.9)."
+        ]
+    },
+    "bmi": {
+        "keywords": ["bmi", "what is bmi", "bmi meaning", "bmi formula", "body mass index"],
+        "responses": [
+            "BMI stands for Body Mass Index — a simple ratio of your weight to your height used to classify weight status.",
+            "The formula for BMI is: weight in kg divided by height in meters squared (kg/m²).",
+            "A BMI between 18.5 and 24.9 is considered healthy. Below 18.5 is underweight, 25–29.9 is overweight, and 30+ is obese.",
+            "While BMI is a quick screening tool, it doesn't measure body fat or muscle mass — athletes may have high BMI but low body fat.",
+            "Use BMI alongside other metrics like body fat percentage and waist circumference for a clearer health picture."
+        ]
+    },
+
+
+    
     "flexibility": {
         "keywords": ["stretch", "flexibility", "yoga", "mobility", "warm", "how to improve flexibility"],
         "responses": [
