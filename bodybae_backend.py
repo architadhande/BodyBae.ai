@@ -76,126 +76,214 @@ def calculate_bmi(weight: float, height: float) -> tuple:
 # Comprehensive FAQ knowledge base extracted from the PDF and expanded
 FAQ_KNOWLEDGE = {
     "protein": {
-        "keywords": ["protein", "whey", "muscle", "supplement", "amino"],
+        "keywords": ["protein", "whey", "muscle", "supplement", "amino", "casein", "plant protein", "pea protein", "best protein powder", "how much protein", "high protein foods"],
         "responses": [
-            "Based on research, you need approximately 1.6g of protein per kilogram of bodyweight per day for muscle gain. Protein is essential for rebuilding muscle and recovery.",
-            "Great protein sources include meat, fish, eggs, legumes, nuts, and whey protein supplements. For muscle growth, combine adequate protein with consistent strength training.",
-            "Whey protein is a convenient way to meet your protein needs. You can use it in shakes, pancakes, protein balls, or overnight oats for variety.",
-            "For optimal muscle protein synthesis, aim to distribute protein intake throughout the day, with 20-30g per meal.",
-            "Plant-based protein sources include lentils, chickpeas, quinoa, tofu, and tempeh. Combine different sources for complete amino acid profiles."
+            "You need about 1.6–2.2g protein/kg body weight daily for muscle gain and fat loss support.",
+            "Best high-protein foods: chicken, eggs, fish, Greek yogurt, lentils, tofu, and whey protein.",
+            "Whey is fast-absorbing — great post-workout. Casein digests slowly — ideal before bed.",
+            "Vegan? Combine legumes, grains, nuts, and seeds for a complete amino acid profile.",
+            "Distribute protein intake evenly throughout the day for optimal muscle protein synthesis.",
+            "You can safely consume up to 2.2g/kg body weight if training intensely — more isn’t proven beneficial.",
+            "Post-workout meals should include 20–30g protein to optimize muscle repair and recovery.",
+            "Protein shakes aren't mandatory — real food like eggs, chicken, and tofu work just as well.",
+            "High-protein breakfast ideas: protein oats, cottage cheese, egg wraps, Greek yogurt bowls.",
+            "Protein timing matters less than total daily intake — just hit your daily goal."
+
         ]
     },
     "calories": {
-        "keywords": ["calories", "tdee", "bmr", "energy", "calorie", "deficit", "surplus"],
+        "keywords": ["calories", "tdee", "bmr", "energy", "deficit", "surplus", "maintenance", "macros", "cutting", "bulk calories", "how many calories", "calorie calculator"],
         "responses": [
-            "Your Total Daily Energy Expenditure (TDEE) depends on your BMR and activity level. To lose fat, subtract 500kcal from your TDEE. To gain muscle, add 250-500kcal.",
-            "Calculate your BMR using: (10 × weight in kg) + (6.25 × height in cm) - (5 × age) + 5 for men, or - 161 for women.",
-            "Track your calories accurately for best results. Small inaccuracies can add up and affect your progress.",
-            "A 500-calorie daily deficit typically results in 0.5kg weight loss per week - a safe and sustainable rate.",
-            "For muscle gain, a 250-500 calorie surplus is recommended, combined with progressive strength training."
+            "TDEE = BMR + activity. A deficit of 500kcal/day loses about 0.5kg/week.",
+            "Bulk: 250–500 extra calories/day. Cut: 500 calorie deficit/day for steady fat loss.",
+            "Use a TDEE calculator to find your maintenance, then adjust based on your goal.",
+            "Calories matter — even if eating 'clean,' overconsumption causes weight gain.",
+            "Macronutrient breakdown suggestion: 35% protein, 40% carbs, 25% healthy fats.",
+            "A calorie is a calorie for weight balance, but food quality affects hunger, energy, and health.",
+            "Calorie calculators give estimates — track your weight weekly to adjust as needed.",
+            "Eating too few calories can slow metabolism and increase muscle loss.",
+            "If fat loss stalls, try reducing calories by 100–200/day or increasing daily steps.",
+            "Use a food scale for accurate calorie tracking — eyeballing often underestimates intake."
+
         ]
     },
     "workout": {
-        "keywords": ["workout", "exercise", "hiit", "training", "gym", "cardio", "strength"],
+        "keywords": ["workout", "exercise", "hiit", "training", "gym", "cardio", "strength", "home workout", "mobility", "best exercises", "fat burning workouts", "training split"],
         "responses": [
-            "HIIT workouts are excellent for burning calories and improving fitness. Try circuits of burpees, jump squats, press-ups, and planks with 60-second rest between circuits.",
-            "For home workouts, focus on compound movements like squats, lunges, push-ups, and planks. Do 5 circuits of 15 reps each exercise.",
-            "Mix up your workouts to avoid plateaus. Combine strength training with cardio, and vary intensity and exercises weekly.",
-            "Aim for at least 150 minutes of moderate aerobic activity or 75 minutes of vigorous activity per week, plus strength training twice weekly.",
-            "Progressive overload is key for muscle growth - gradually increase weight, reps, or sets over time."
+            "Best exercises for muscle gain: squats, deadlifts, bench press, overhead press, pull-ups.",
+            "Fat loss? Focus on HIIT, strength training, and staying active throughout the day.",
+            "A balanced split: 2 upper, 2 lower, and 1 full-body or cardio day weekly.",
+            "Home workout? Use bodyweight circuits: push-ups, lunges, squats, planks.",
+            "Switch up your workout plan every 4–6 weeks to prevent plateaus and boredom.",
+            "Even 20–30 minutes of daily movement boosts mood, heart health, and metabolism.",
+            "Focus on form before increasing weight to prevent injuries.",
+            "Training consistently (3–5x/week) matters more than having a 'perfect' workout split.",
+            "Don’t skip warm-ups — dynamic mobility drills prep your joints and muscles.",
+            "Use progressive overload: gradually increase reps, sets, or weight weekly."
         ]
     },
     "diet": {
-        "keywords": ["diet", "nutrition", "food", "meal", "eat", "macro", "carb", "fat"],
+        "keywords": ["diet", "nutrition", "food", "meal", "eat", "macro", "carb", "fat", "fiber", "clean eating", "healthy snacks", "meal plan", "low carb", "keto", "intermittent fasting"],
         "responses": [
-            "A balanced diet should include 35% fats (focus on healthy fats like avocados and nuts), adequate protein (1.6g/kg body weight), and the rest from carbohydrates.",
-            "Meal prep is key to success. Plan your meals ahead, include plenty of vegetables, and allow yourself occasional treats to stay on track.",
-            "Stay hydrated, eat plenty of fiber to feel fuller longer, and avoid excessive alcohol which adds empty calories.",
-            "Focus on whole foods: lean proteins, complex carbohydrates, healthy fats, and plenty of fruits and vegetables.",
-            "Timing matters: eat protein within 2-3 hours post-workout for optimal recovery, and spread meals throughout the day."
+            "A balanced diet = lean proteins, complex carbs, healthy fats, fiber, and hydration.",
+            "Healthy snack ideas: Greek yogurt, boiled eggs, protein smoothies, and nuts.",
+            "Low-carb diets can aid fat loss but aren't essential — calorie balance matters most.",
+            "Intermittent fasting works for some as an appetite control strategy, not magic.",
+            "Ensure at least 25–30g fiber/day for digestion, blood sugar control, and satiety.",
+            "80/20 rule: eat nutritious whole foods 80% of the time, enjoy treats 20%.",
+            "Whole grains, fruits, and veggies keep you fuller, aid digestion, and stabilize energy.",
+            "Avoid ultra-restrictive diets — sustainable habits yield long-term success.",
+            "Balance each plate: half veggies, 1/4 lean protein, 1/4 carbs.",
+            "Track your fiber — aim for at least 25–30g daily for digestion and satiety."
+
         ]
     },
     "supplements": {
-        "keywords": ["supplement", "vitamin", "pre-workout", "bcaa", "creatine", "omega"],
+        "keywords": ["supplement", "vitamin", "pre-workout", "bcaa", "creatine", "omega", "multivitamin", "magnesium", "electrolyte", "greens powder", "what supplements should I take", "best supplements for muscle"],
         "responses": [
-            "Key supplements include: protein powder for muscle growth, omega-3 for heart health, and a good multivitamin for overall health.",
-            "Pre-workout supplements with caffeine can boost performance. For recovery, consider whey protein or plant-based alternatives.",
-            "Supplements aren't magic - they work best alongside a balanced diet and consistent training routine.",
-            "Creatine monohydrate (3-5g daily) is one of the most researched supplements for strength and muscle gains.",
-            "Vitamin D, especially in winter months, can support immune function and muscle recovery."
-        ]
-    },
-    "weight_loss": {
-        "keywords": ["weight loss", "lose weight", "fat loss", "cutting", "deficit", "burn"],
-        "responses": [
-            "For healthy weight loss, aim for a 500-calorie deficit daily. This leads to about 0.5kg loss per week - sustainable and healthy.",
-            "Combine calorie deficit with strength training to preserve muscle mass while losing fat. Don't rush the process.",
-            "Track progress through measurements and photos, not just the scale. Weight can fluctuate daily due to water retention.",
-            "High-protein diets (1.6-2.2g/kg) help preserve muscle during weight loss and increase satiety.",
-            "Include refeed days or diet breaks every 6-8 weeks to prevent metabolic adaptation."
-        ]
-    },
-    "muscle_gain": {
-        "keywords": ["muscle", "gain", "bulk", "strength", "mass", "build"],
-        "responses": [
-            "To gain muscle, eat in a 250-500 calorie surplus with adequate protein (1.6g/kg body weight) and progressive strength training.",
-            "Focus on compound exercises like squats, deadlifts, and presses. Progressive overload is key - gradually increase weight or reps.",
-            "Recovery is crucial for muscle growth. Aim for 7-9 hours of sleep and rest days between training the same muscle groups.",
-            "Train each muscle group 2-3 times per week for optimal growth. Volume (sets x reps x weight) drives hypertrophy.",
-            "Be patient - natural muscle gain is typically 0.25-0.5kg per month for beginners, less for experienced lifters."
-        ]
-    },
-    "recovery": {
-        "keywords": ["recovery", "rest", "sleep", "sore", "pain", "injury"],
-        "responses": [
-            "Sleep 7-9 hours nightly for optimal recovery. During sleep, growth hormone peaks and muscle repair occurs.",
-            "Active recovery (light walking, swimming, yoga) can help reduce soreness and improve circulation.",
-            "Proper nutrition post-workout is crucial: consume protein and carbs within 2-3 hours for optimal recovery.",
-            "Listen to your body - persistent pain may indicate injury. Rest and seek professional advice if needed.",
-            "Foam rolling and stretching can help reduce muscle tension and improve flexibility."
-        ]
-    },
-    "motivation": {
-        "keywords": ["motivation", "goal", "progress", "plateau", "stuck", "help"],
-        "responses": [
-            "Set SMART goals: Specific, Measurable, Achievable, Relevant, Time-bound. Break big goals into smaller milestones.",
-            "Track your progress with photos, measurements, and performance metrics - not just the scale.",
-            "Find a workout buddy or join a fitness community for accountability and support.",
-            "Celebrate small victories and focus on building sustainable habits rather than perfect adherence.",
-            "Remember: progress isn't always linear. Plateaus are normal - stay consistent and trust the process."
+            "Top evidence-based supplements: whey protein, creatine, omega-3, and vitamin D.",
+            "Pre-workouts with caffeine improve focus and energy — use them responsibly.",
+            "BCAAs help muscle recovery in fasted states, but whole protein is better overall.",
+            "Daily creatine (3–5g) is safe and improves strength, power, and muscle volume.",
+            "Magnesium aids sleep, muscle recovery, and stress management — many are deficient.",
+            "Supplements fill gaps — prioritize whole foods first.",
+            "Greens powders offer vitamins but shouldn’t replace vegetables.",
+            "Zinc and vitamin C can support immune health, especially in winter.",
+            "Electrolyte tablets help during long or sweaty workouts.",
+            "Read labels — avoid underdosed or filler-heavy supplements."
+
         ]
     },
     "hydration": {
-        "keywords": ["water", "hydration", "drink", "fluid", "thirsty"],
+        "keywords": ["water", "hydration", "drink", "fluid", "thirsty", "electrolyte", "dehydration", "sports drink", "how much water", "best drink after workout"],
         "responses": [
-            "Aim for at least 35ml of water per kg of body weight daily, more if you're active or in hot weather.",
-            "Proper hydration supports metabolism, nutrient transport, and exercise performance.",
-            "Check your urine color - pale yellow indicates good hydration, dark yellow suggests you need more fluids.",
-            "Drink water before, during, and after exercise. For workouts over 60 minutes, consider electrolyte replacement.",
-            "Foods like watermelon, cucumber, and oranges also contribute to hydration."
+            "Aim for 35–40ml water per kg of body weight daily, more with exercise or heat.",
+            "Pale yellow urine = hydrated. Dark = drink more water.",
+            "Best post-workout drink: water + electrolytes for sessions over 60 mins.",
+            "Sugary sports drinks are unnecessary unless training intensely for 60+ minutes.",
+            "Coconut water naturally restores electrolytes, great for mild hydration.",
+            "Start your day with a glass of water — dehydration affects energy and focus.",
+            "Drink more if you’re sweating heavily or in hot climates.",
+            "Flavored water or herbal teas count towards your fluid goal.",
+            "Avoid excess caffeine and alcohol as they dehydrate you.",
+            "Water-rich foods like cucumber and watermelon also boost hydration."
+
+        ]
+    },
+    "motivation": {
+        "keywords": ["motivation", "goal", "progress", "plateau", "stuck", "help", "discipline", "routine", "consistency", "visualize", "why am I not losing weight"],
+        "responses": [
+            "Set SMART goals: Specific, Measurable, Achievable, Relevant, Time-bound.",
+            "Plateaus are normal — adjust calories, training intensity, or take a rest week.",
+            "Track non-scale victories: strength gains, measurements, energy, sleep quality.",
+            "Focus on discipline, not motivation — habits built daily make lasting change.",
+            "Visualize your goal daily — it reinforces commitment and purpose.",
+            "Motivation fades — discipline and routine keep you going.",
+            "Set weekly action goals: 'work out 4x' or 'cook 3 healthy meals.'",
+            "Celebrate non-scale wins like better sleep or improved strength.",
+            "Write down why you started to stay anchored to your goal.",
+            "Small steps daily beat occasional big efforts."
+
+        ]
+    },
+    "weight_loss": {
+        "keywords": ["weight loss", "lose weight", "fat loss", "cutting", "deficit", "burn", "how to lose belly fat", "fat burning foods"],
+        "responses": [
+            "Target fat loss, not spot reduction — you can’t choose where fat comes off first.",
+            "Best fat-loss foods: lean protein, leafy greens, berries, oats, avocado, green tea.",
+            "Sleep affects fat loss — aim for 7–9 hours to regulate hunger hormones.",
+            "Lifting weights while cutting preserves muscle and keeps metabolism higher.",
+            "Monitor weight via weekly averages to offset daily water fluctuation noise.",
+            "Prioritize protein while cutting to preserve muscle mass.",
+            "Drink water before meals to reduce hunger.",
+            "Manage stress — high cortisol can hinder fat loss.",
+            "Avoid crash diets — they damage metabolism and lead to regain.",
+            "Track inches, not just weight. Progress shows in photos and how clothes fit."
+
+        ]
+    },
+    "muscle_gain": {
+        "keywords": ["muscle", "gain", "bulk", "strength", "mass", "build", "how to gain muscle fast", "best foods for muscle"],
+        "responses": [
+            "Fastest muscle gain: calorie surplus + progressive strength training + good sleep.",
+            "Best foods for muscle: chicken, salmon, rice, oats, quinoa, eggs, Greek yogurt.",
+            "Don't skip recovery days — muscles grow while you rest, not in the gym.",
+            "Track lifts and aim to increase weight/reps weekly to stimulate new muscle growth.",
+            "Compound lifts (squats, bench, deadlift) deliver the biggest hypertrophy stimulus.",
+            "Eating slightly above maintenance ensures muscle gain without excessive fat.",
+            "Strength training 3–5x/week works best for hypertrophy.",
+            "Sleep impacts muscle recovery and testosterone production.",
+            "Creatine is one of the safest, most effective muscle-building supplements.",
+            "Take progress pics monthly — the mirror shows what the scale can't."
+
+        ]
+    },
+    "recovery": {
+        "keywords": ["recovery", "rest", "sleep", "sore", "pain", "injury", "deload", "muscle recovery", "post workout recovery"],
+        "responses": [
+            "Sleep is non-negotiable for recovery — aim for 7–9 hours, especially after tough sessions.",
+            "Use foam rolling, stretching, and light walks to improve recovery and reduce soreness.",
+            "Protein and carbs within 1–2 hours post-workout speed up muscle repair.",
+            "If soreness persists >3 days, reduce training intensity or volume.",
+            "Schedule deload weeks every 6–8 weeks to manage fatigue and prevent injury.",
+            "A post-workout cooldown lowers heart rate and improves recovery.",
+            "Active recovery days speed up muscle healing.",
+            "Listen to your body — persistent soreness may mean overtraining.",
+            "Epsom salt baths can ease muscle tightness and reduce inflammation.",
+            "Keep protein and sleep consistent even on rest days."
+
         ]
     },
     "cardio": {
-        "keywords": ["cardio", "running", "aerobic", "endurance", "stamina"],
+        "keywords": ["cardio", "running", "aerobic", "endurance", "stamina", "best cardio for fat loss", "how much cardio"],
         "responses": [
-            "For general health, aim for 150 minutes of moderate cardio or 75 minutes of vigorous cardio weekly.",
-            "HIIT (High-Intensity Interval Training) can burn more calories in less time and improve cardiovascular fitness.",
-            "Mix steady-state cardio with interval training for best results. Both have unique benefits.",
-            "Cardio doesn't kill gains if programmed properly - keep volume moderate and fuel appropriately.",
-            "Low-intensity cardio (walking, cycling) can aid recovery and won't interfere with strength training."
+            "150 min moderate or 75 min vigorous cardio per week improves heart and lung health.",
+            "HIIT burns more calories quickly and boosts metabolic rate for hours after.",
+            "Best cardio for fat loss: rowing, incline walking, cycling, or jump rope.",
+            "Include low-intensity steady state (LISS) cardio on recovery days to aid blood flow.",
+            "Don’t overdo cardio while bulking — it can hinder muscle growth.",
+            "HIIT burns calories fast and improves endurance in short sessions.",
+            "Walking 8–10k steps daily improves health and supports fat loss.",
+            "Swimming is a joint-friendly, full-body cardio workout.",
+            "Track heart rate to stay in your target cardio zone.",
+            "Do cardio you enjoy — consistency beats perfection."
+
         ]
     },
     "flexibility": {
-        "keywords": ["stretch", "flexibility", "yoga", "mobility", "warm"],
+        "keywords": ["stretch", "flexibility", "yoga", "mobility", "warm", "how to improve flexibility"],
         "responses": [
-            "Dynamic stretching before workouts prepares muscles for activity. Save static stretching for after.",
-            "Aim to stretch major muscle groups 2-3 times per week, holding each stretch for 15-30 seconds.",
-            "Yoga or dedicated mobility work can improve flexibility, reduce injury risk, and enhance performance.",
-            "Foam rolling before stretching can help release muscle tension and improve range of motion.",
-            "Good flexibility and mobility become increasingly important as we age - start early and stay consistent."
+            "Dynamic stretching pre-workout improves performance and reduces injury risk.",
+            "Stretch each major muscle group 2–3 times per week, holding 20–30 seconds.",
+            "Foam rolling before and after workouts boosts mobility and eases soreness.",
+            "Yoga enhances flexibility, breathing control, and mental focus.",
+            "Mobility drills keep joints healthy and improve lifting form.",
+            "Stretch post-workout when muscles are warm.",
+            "Focus extra mobility on tight areas like hips and shoulders.",
+            "Regular stretching reduces injury risk and boosts workout performance.",
+            "Yoga improves mental calmness along with flexibility.",
+            "Consistency matters — flexibility improves slowly over time."
+
+        ]
+    },
+    "general_health": {
+        "keywords": ["health", "wellbeing", "stress", "sleep", "mental health", "lifestyle", "energy", "longevity", "immune", "best daily habits"],
+        "responses": [
+            "Daily habits for health: hydration, 7–9 hours sleep, 7,000+ steps, balanced diet.",
+            "Manage stress via breathing exercises, journaling, and nature walks.",
+            "Low vitamin D affects mood and immunity — aim for 10–20 mins sun or supplement.",
+            "Omega-3 supports heart, joint, and brain health — consider fish or algae oil.",
+            "Stay consistent — small daily habits compound into long-term wellbeing.",
+            "Aim for 7–8k+ daily steps for longevity and metabolic health.",
+            "Sun exposure boosts mood and regulates circadian rhythms.",
+            "Deep breathing exercises reduce anxiety and improve focus.",
+            "Strength training twice a week prevents muscle loss with aging.",
+            "Stay consistent — your future health depends on habits you build today."
+
         ]
     }
 }
+
 
 # Daily tips database
 DAILY_TIPS = [
@@ -226,16 +314,16 @@ def find_best_response(message: str, user_profile: dict = None) -> str:
             target_calories = user_profile.get('target_calories', tdee)
             
             response = f"Based on your profile:\n"
-            response += f"📊 BMR: {bmr} calories (calories burned at rest)\n"
-            response += f"📊 TDEE: {tdee} calories (total daily needs)\n"
+            response += f"📊 BMR: {bmr} calories (calories burned at rest)\n\n"
+            response += f"📊 TDEE: {tdee} calories (total daily needs)\n\n"
             
             if goal and goal != 'Maintain Weight':
                 target_calories, advice = calculate_goal_calories(tdee, goal)
-                response += f"🎯 Goal: {goal}\n"
-                response += f"🍽️ Target Calories: {target_calories} calories/day\n"
-                response += f"\n💡 {advice}"
+                response += f"🎯 Goal: {goal}\n\n"
+                response += f"🍽️ Target Calories: {target_calories} calories/day\n\n"
+                response += f"\n💡 {advice}\n"
             else:
-                response += f"🍽️ Maintenance Calories: {tdee} calories/day"
+                response += f"🍽️ Maintenance Calories: {tdee} calories/day\n"
             
             return response
     
