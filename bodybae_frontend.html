@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BodyBae.ai - Your AI Fitness Companion</title>
+    <style>
+        :root {
+            --matcha-primary: #7CB342;
+            --matcha-dark: #5A8030;
+            --matcha-light: #AED581;
+            --matcha-pale: #E8F5E9;
+            --text-primary: #1B5E20;
+            --text-secondary: #4E342E;
+            --background: #FAFAFA;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Left Panel - BMI & User Info */
+        .left-panel {
+            width: 300px;
+            background-color: var(--matcha-pale);
+            padding: 2rem;
+            overflow-y: auto;
+            border-right: 2px solid var(--matcha-light);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: var(--matcha-dark);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .user-info {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .bmi-display {
+            background-color: var(--matcha-primary);
+            color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .bmi-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .bmi-category {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .bmi-advice {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Main Chat Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--white);
+        }
+
+        .chat-header {
+            background-color: var(--matcha-primary);
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            background-color: var(--background);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        .message.bot .message-content {
+            background-color: var(--matcha-pale);
+            color: var(--text-primary);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user .message-content {
+            background-color: var(--matcha-primary);
+            color: var(--white);
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .message.bot .message-avatar {
+            background-color: var(--matcha-primary);
+            color: var(--white);
+        }
+
+        .message.user .message-avatar {
+            background-color: var(--matcha-dark);
+            color: var(--white);
+            order: 1;
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 1.5rem;
+            background-color: var(--white);
+            border-top: 2px solid var(--matcha-light);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--matcha-light);
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #userInput:focus {
+            border-color: var(--matcha-primary);
+        }
+
+        .send-btn {
+            padding: 1rem 2rem;
+            background-color: var(--matcha-primary);
+            color: var(--white);
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .send-btn:hover {
+            background-color: var(--matcha-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px var(--shadow);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Onboarding Form */
+        .onboarding-form {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--matcha-light);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--matcha-primary);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--matcha-primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--matcha-dark);
+        }
+
+        /* Goals Section */
+        .goals-section {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .goal-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .goal-btn {
+            padding: 0.8rem;
+            background-color: var(--matcha-pale);
+            color: var(--text-primary);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .goal-btn:hover {
+            border-color: var(--matcha-primary);
+        }
+
+        .goal-btn.selected {
+            background-color: var(--matcha-primary);
+            color: var(--white);
+        }
+
+        /* Daily Tip */
+        .daily-tip {
+            background-color: var(--matcha-light);
+            color: var(--text-primary);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--matcha-primary);
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px solid var(--matcha-light);
+                display: none;
+            }
+
+            .left-panel.mobile-show {
+                display: block;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1000;
+                background-color: var(--matcha-primary);
+                color: var(--white);
+                border: none;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                cursor: pointer;
+                box-shadow: 0 2px 10px var(--shadow);
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--matcha-pale);
+            border-radius: 50%;
+            border-top-color: var(--matcha-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+    
+    <div class="container">
+        <!-- Left Panel -->
+        <div class="left-panel" id="leftPanel">
+            <div class="logo">
+                <h1>BodyBae.ai</h1>
+                <p>Your AI Fitness Companion</p>
+            </div>
+
+            <!-- Onboarding Form -->
+            <div class="onboarding-form" id="onboardingForm">
+                <h3>Let's Get Started!</h3>
+                <form id="userForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" min="13" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">Sex</label>
+                        <select id="sex" required>
+                            <option value="">Select...</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" min="100" max="250" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" min="20" max="300" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="activityLevel">Activity Level</label>
+                        <select id="activityLevel" required>
+                            <option value="">Select...</option>
+                            <option value="sedentary">Sedentary</option>
+                            <option value="light">Lightly Active</option>
+                            <option value="moderate">Moderately Active</option>
+                            <option value="active">Very Active</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">Calculate BMI & Start</button>
+                </form>
+            </div>
+
+            <!-- User Info Display -->
+            <div class="user-info" id="userInfoDisplay" style="display: none;">
+                <h3 id="userName"></h3>
+                <p id="userDetails"></p>
+            </div>
+
+            <!-- BMI Display -->
+            <div class="bmi-display" id="bmiDisplay">
+                <div class="bmi-value" id="bmiValue">--</div>
+                <div class="bmi-category" id="bmiCategory">--</div>
+                <div class="bmi-advice" id="bmiAdvice">--</div>
+            </div>
+
+            <!-- Goals Section -->
+            <div class="goals-section" id="goalsSection">
+                <h3>Select Your Goal</h3>
+                <div class="goal-options">
+                    <button class="goal-btn" onclick="selectGoal('Maintain Weight')">Maintain Weight</button>
+                    <button class="goal-btn" onclick="selectGoal('Lose Weight')">Lose Weight</button>
+                    <button class="goal-btn" onclick="selectGoal('Gain Weight')">Gain Weight</button>
+                    <button class="goal-btn" onclick="selectGoal('Gain Muscle')">Gain Muscle</button>
+                    <button class="goal-btn" onclick="selectGoal('Lose Fat')">Lose Fat</button>
+                    <button class="goal-btn" onclick="selectGoal('Toning')">Toning</button>
+                    <button class="goal-btn" onclick="selectGoal('Bulking')">Bulking</button>
+                </div>
+                <div class="form-group">
+                    <label for="targetWeeks">Target Timeframe (weeks)</label>
+                    <input type="number" id="targetWeeks" min="4" max="52" value="12">
+                </div>
+                <button class="btn-primary" onclick="setGoal()">Set Goal</button>
+            </div>
+
+            <!-- Daily Tip -->
+            <div class="daily-tip" id="dailyTip">
+                Loading daily tip...
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="main-content">
+            <div class="chat-header">
+                <h2>Chat with BodyBae</h2>
+                <p>Your AI-powered fitness assistant</p>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-avatar">BB</div>
+                    <div class="message-content">
+                        Hello! I'm BodyBae, your AI fitness companion. 🌱 Let's start by getting to know you better. Please fill out the form on the left to calculate your BMI and get personalized fitness advice!
+                    </div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="input-area">
+                <div class="input-container">
+                    <input type="text" id="userInput" placeholder="Ask me about fitness, nutrition, or workouts..." disabled>
+                    <button class="send-btn" onclick="sendMessage()" id="sendBtn" disabled>Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentUserId = null;
+        let selectedGoal = null;
+        let chatEnabled = false;
+
+        // API base URL - empty string means use same origin
+        const API_URL = '';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDailyTip();
+            
+            // Form submission
+            document.getElementById('userForm').addEventListener('submit', handleOnboarding);
+            
+            // Enter key for chat
+            document.getElementById('userInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && chatEnabled) {
+                    sendMessage();
+                }
+            });
+        });
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const leftPanel = document.getElementById('leftPanel');
+            leftPanel.classList.toggle('mobile-show');
+        }
+
+        // Handle onboarding form submission
+        async function handleOnboarding(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                age: parseInt(document.getElementById('age').value),
+                sex: document.getElementById('sex').value,
+                height: parseFloat(document.getElementById('height').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                activity_level: document.getElementById('activityLevel').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/onboard`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentUserId = data.user_id;
+                    currentUser = {
+                        ...formData,
+                        user_id: data.user_id,
+                        bmi: data.bmi,
+                        bmi_category: data.bmi_category,
+                        bmr: data.bmr,
+                        tdee: data.tdee
+                    };
+                    
+                    displayUserInfo();
+                    displayBMI(data);
+                    addBotMessage(data.message);
+                    
+                    // Show goals section
+                    document.getElementById('goalsSection').style.display = 'block';
+                    
+                    // Enable chat
+                    enableChat();
+                } else {
+                    console.error('Error response:', data);
+                    alert('Error: ' + (data.error || data.detail || 'Failed to process information'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to connect to server. Please check your connection and try again.');
+            }
+        }
+
+        // Display user info
+        function displayUserInfo() {
+            document.getElementById('onboardingForm').style.display = 'none';
+            document.getElementById('userInfoDisplay').style.display = 'block';
+            
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userDetails').innerHTML = `
+                Age: ${currentUser.age} | ${currentUser.sex}<br>
+                Height: ${currentUser.height}cm | Weight: ${currentUser.weight}kg<br>
+                Activity: ${currentUser.activity_level}<br>
+                TDEE: ~${currentUser.tdee} calories/day
+            `;
+        }
+
+        // Display BMI
+        function displayBMI(data) {
+            document.getElementById('bmiDisplay').style.display = 'block';
+            document.getElementById('bmiValue').textContent = data.bmi;
+            document.getElementById('bmiCategory').textContent = data.bmi_category;
+            document.getElementById('bmiAdvice').textContent = data.bmi_advice;
+        }
+
+        // Select goal
+        function selectGoal(goal) {
+            selectedGoal = goal;
+            
+            // Update UI
+            document.querySelectorAll('.goal-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        // Set goal
+        async function setGoal() {
+            if (!selectedGoal) {
+                alert('Please select a goal first!');
+                return;
+            }
+
+            const targetWeeks = parseInt(document.getElementById('targetWeeks').value);
+
+            try {
+                const response = await fetch(`${API_URL}/api/set_goal`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        goal: selectedGoal,
+                        target_weeks: targetWeeks,
+                        user_id: currentUserId
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addBotMessage(data.message);
+                    
+                    // Update user's goal and target calories if available
+                    if (currentUser && data.target_calories) {
+                        currentUser.goal = selectedGoal;
+                        currentUser.target_calories = data.target_calories;
+                    }
+                    
+                    // Hide goals section after setting
+                    document.getElementById('goalsSection').style.display = 'none';
+                    
+                    // Show daily tip
+                    document.getElementById('dailyTip').style.display = 'block';
+                } else {
+                    alert('Error: ' + (data.error || data.detail || 'Failed to set goal'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to connect to server. Please try again.');
+            }
+        }
+
+        // Enable chat functionality
+        function enableChat() {
+            chatEnabled = true;
+            document.getElementById('userInput').disabled = false;
+            document.getElementById('sendBtn').disabled = false;
+            document.getElementById('userInput').placeholder = "Ask me anything about fitness, nutrition, or your goals...";
+        }
+
+        // Send message
+        async function sendMessage() {
+            if (!chatEnabled) return;
+            
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addUserMessage(message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                const response = await fetch(`${API_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        user_profile: currentUser
+                    })
+                });
+
+                const data = await response.json();
+                
+                hideTypingIndicator();
+                
+                if (response.ok) {
+                    addBotMessage(data.response);
+                } else {
+                    addBotMessage("Sorry, I couldn't process that. Please try again.");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                hideTypingIndicator();
+                addBotMessage("Sorry, I'm having trouble connecting to the server. Please try again later.");
+            }
+        }
+
+        // Add user message to chat
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-content">${escapeHtml(message)}</div>
+                <div class="message-avatar">You</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // Add bot message to chat
+        function addBotMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">BB</div>
+                <div class="message-content">${escapeHtml(message)}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'block';
+            scrollToBottom();
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        // Scroll to bottom of chat
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Load daily tip
+        async function loadDailyTip() {
+            try {
+                const response = await fetch(`${API_URL}/api/daily_tip`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('dailyTip').textContent = `💡 ${data.tip}`;
+                }
+            } catch (error) {
+                console.error('Error loading daily tip:', error);
+                document.getElementById('dailyTip').textContent = '💡 Stay hydrated and keep moving!';
+            }
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
+</body>
+</html>
