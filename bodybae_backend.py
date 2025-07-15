@@ -1,19 +1,3 @@
-@app.route('/api/chat', methods=['POST'])
-def chat():
-    """Handle chat messages"""
-    try:
-        data = request.json
-        user_message = data.get('message', '')
-        user_profile = data.get('user_profile', {})
-        
-        logger.info(f"Chat request: {user_message}")
-        
-        # Get relevant response with user context
-        response = find_best_response(user_message, user_profile)
-        
-        # Personalize if user profile available and not already personalized
-        if user_profile and 'name' in user_profile and "Based on your profile:" not in response:
-            # Onlyfrom flask import Flask, request, jsonify, send_from_directory, render_template_string
 from flask_cors import CORS
 import json
 import os
